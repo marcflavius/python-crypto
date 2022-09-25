@@ -1,34 +1,73 @@
 """ Blockchain lib """
+
+
 blockchain = []
 
 
 def get_last_blockchain_value():
     """ Get the last element in the blockchain"""
-    return blockchain[-1] if len(blockchain) > 0 else [1]
+    return blockchain[-1] if len(blockchain) > 0 else None
 
 
 def get_user_input(msg):
     """ Get a user input """
-    return float(input(msg+': \n'))
+    output = input(msg+': \n')
+    return output
 
 
-def add_value(transaction_amount, last_transaction):
+def get_user_input_raw(msg):
+    """ Get a user input raw apply no format to the message outputted """
+    return input(msg)
+
+
+def add_node_to_blockchain(transaction_amount, last_transaction):
     """ Add a Item to the blockchain """
     blockchain.append([last_transaction, transaction_amount])
 
 
-def grouped_transaction():
+def grouped_transaction(given_blockchain):
     """ Groupe transaction handler"""
-    total_transaction = int(get_user_input("Please enter the number of transaction you wish to proceed"))
-    for count in range(total_transaction):
-        tx_amount = get_user_input('{}/{} Your transaction please: '.format(count+1, total_transaction))
-        add_value(tx_amount, get_last_blockchain_value())
+    while True:
+        user_operation_help = """
+            Please choose
+            1: Add a new transaction value
+            2: Output the blockchain blocs
+            3: To Quit
+        """
+        user_choice = get_user_input_raw(user_operation_help)
+        choice_list = [str(item+1) for item in range(3)]
+
+        # choice 1
+        if user_wants_to_add_a_new_transaction(user_choice):
+            tx_amount = float(get_user_input('Your transaction please: '))
+            add_node_to_blockchain(tx_amount, get_last_blockchain_value())
+        # choice 2
+        elif user_wants_to_output_the_blockchain(user_choice):
+            output_blockchain(given_blockchain)
+        # choice not handled
+        elif user_choice not in choice_list:
+            print('Input invalid, please choose a listed choice')
+        else:
+        # choice 3
+            break
 
 
-grouped_transaction()
+def user_wants_to_output_the_blockchain(user_choice):
+    """ Check for a output blockchain operation """
+    return user_choice == '2'
 
 
-for block in blockchain:
-    print('Outpouting blck')
-    print(block)
+def user_wants_to_add_a_new_transaction(user_choice):
+    """ Check for a new transaction operation """
+    return user_choice == '1'
+
+
+def output_blockchain(given_blockchain):
+    """ Output the block chain """
+    for block in given_blockchain:
+        print('Outputting block') 
+        print(block)
+
+
+grouped_transaction(blockchain)
 print('God Bye!')
