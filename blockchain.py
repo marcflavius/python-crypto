@@ -2,6 +2,8 @@
 
 
 blockchain = []
+open_transaction = []
+owner = 'Marc'
 
 
 def get_last_blockchain_value():
@@ -20,12 +22,19 @@ def get_user_input_raw(msg):
     return input(msg)
 
 
-def add_node_to_blockchain(transaction_amount, last_transaction):
+def add_transaction(recipient, sender=owner, amount=1.0):
     """ Add a Item to the blockchain 
-    last_transaction: get the last blockchain node 
-    transaction_amount: the given transaction amount
+    sender: the sender of the coins. 
+    recipient: the recipient of the coins.
+    amount: the given transaction amount
     """
-    blockchain.append([last_transaction, transaction_amount])
+    transaction = {"sender": sender, "recipient": recipient, "amount": amount, }
+    open_transaction.append(transaction)
+    print(transaction)
+
+
+def mine_block():
+    pass
 
 
 def grouped_transaction(given_blockchain):
@@ -37,14 +46,13 @@ def grouped_transaction(given_blockchain):
             2: Output the blockchain blocs
             q: To Quit
         """
-        user_choice = get_user_input_raw(user_operation_help)
-        choice_list = [str(item+1) for item in range(2)]
-        choice_list.append('q')
+        user_choice, choice_list = get_user_choice(user_operation_help)
 
         # choice 1
         if user_wants_to_add_a_new_transaction(user_choice):
-            tx_amount = float(get_user_input('Your transaction please: '))
-            add_node_to_blockchain(tx_amount, get_last_blockchain_value())
+            transaction_data = get_user_transaction()
+            amount, recipient = transaction_data
+            add_transaction(recipient, amount=amount)
         # choice 2
         elif user_wants_to_output_the_blockchain(user_choice):
             output_blockchain(given_blockchain)
@@ -54,6 +62,19 @@ def grouped_transaction(given_blockchain):
         else:
             # choice 3
             break
+
+
+def get_user_transaction():
+    recipient = (get_user_input('Enter the recipient of the transaction: ')).capitalize()
+    tx_amount = float(get_user_input('Your transaction please: '))
+    return tx_amount, recipient
+
+
+def get_user_choice(user_operation_help):
+    user_choice = get_user_input_raw(user_operation_help)
+    choice_list = [str(item+1) for item in range(2)]
+    choice_list.append('q')
+    return user_choice, choice_list,
 
 
 def user_wants_to_output_the_blockchain(user_choice):
@@ -71,6 +92,7 @@ def output_blockchain(given_blockchain):
     for block in given_blockchain:
         print('Outputting block')
         print(block)
+
 
 if __name__ == "__main__":
     grouped_transaction(blockchain)
