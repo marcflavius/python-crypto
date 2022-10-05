@@ -1,13 +1,37 @@
 """ Blockchain lib """
+import pprint
 
+genesis_block = {
+    "previous_hash": "",
+    "index": 0,
+    "transactions": [],
+},
 
+owner = "Marc"
 blockchain = []
 open_transaction = []
-owner = 'Marc'
+
+
+def verify_chain():
+    """ Verify the blockchain integrity """
+    block_index = 0
+    is_valid = True
+    for current_block in blockchain:
+        prev_block = blockchain[block_index - 1]["previous_hash"]
+        if current_block != prev_block:
+            is_valid = False
+            break
+    return is_valid if current_block["previous_hash"] == None else True
+
+
+def reset_blockchain():
+    """ Wipe the blockcain """
+    global blockchain
+    blockchain = []
 
 
 def get_last_blockchain_value():
-    """ Get the last element in the blockchain"""
+    """ Get the last element in the blockchain """
     return blockchain[-1] if len(blockchain) > 0 else None
 
 
@@ -30,20 +54,34 @@ def add_transaction(recipient, sender=owner, amount=1.0):
     """
     transaction = {"sender": sender, "recipient": recipient, "amount": amount, }
     open_transaction.append(transaction)
-    print(transaction)
 
 
 def mine_block():
-    pass
+    """ Add all open transaction to a block and wipe the open transaction arry"""
+    global blockchain
+    global open_transaction
+
+    last_block = blockchain[-1] if len(blockchain) else None
+
+    previous_hash = last_block
+    new_block = {
+        "previous_hash": previous_hash,
+        "index": len(blockchain),
+        "transactions": open_transaction,
+    }
+    # hashed_block = last_block
+    open_transaction = []
+    blockchain.append(new_block)
 
 
 def grouped_transaction(given_blockchain):
-    """ Groupe transaction handler"""
+    """ Groupe transaction handler """
     while True:
         user_operation_help = """
             Please choose
             1: Add a new transaction value
             2: Output the blockchain blocs
+            2: Mind transaction
             q: To Quit
         """
         user_choice, choice_list = get_user_choice(user_operation_help)
@@ -65,12 +103,14 @@ def grouped_transaction(given_blockchain):
 
 
 def get_user_transaction():
+    """ Get user input transaction"""
     recipient = (get_user_input('Enter the recipient of the transaction: ')).capitalize()
     tx_amount = float(get_user_input('Your transaction please: '))
     return tx_amount, recipient
 
 
 def get_user_choice(user_operation_help):
+    """ Get user choice """
     user_choice = get_user_input_raw(user_operation_help)
     choice_list = [str(item+1) for item in range(2)]
     choice_list.append('q')
@@ -95,5 +135,5 @@ def output_blockchain(given_blockchain):
 
 
 if __name__ == "__main__":
-    grouped_transaction(blockchain)
+    # grouped_transaction(blockchain)
     print('God Bye!')
