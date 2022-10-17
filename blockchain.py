@@ -1,14 +1,13 @@
 """ Blockchain lib """
-import pprint
 
 genesis_block = {
     "previous_hash": "",
     "index": 0,
-    "transactions": [],
-},
+    "transactions": []
+}
 
 owner = "Marc"
-blockchain = []
+blockchain = [genesis_block]
 open_transaction = []
 
 
@@ -21,7 +20,7 @@ def verify_chain():
         if current_block != prev_block:
             is_valid = False
             break
-    return is_valid if current_block["previous_hash"] == None else True
+    return is_valid if current_block["previous_hash"] == {} else True
 
 
 def reset_blockchain():
@@ -32,7 +31,9 @@ def reset_blockchain():
 
 def get_last_blockchain_value():
     """ Get the last element in the blockchain """
-    return blockchain[-1] if len(blockchain) > 0 else None
+    global genesis_block
+    global blockchain
+    return blockchain[-1] if len(blockchain) > 0 else genesis_block
 
 
 def get_user_input(msg):
@@ -52,26 +53,34 @@ def add_transaction(recipient, sender=owner, amount=1.0):
     recipient: the recipient of the coins.
     amount: the given transaction amount
     """
+    global open_transaction
     transaction = {"sender": sender, "recipient": recipient, "amount": amount, }
     open_transaction.append(transaction)
 
 
 def mine_block():
-    """ Add all open transaction to a block and wipe the open transaction arry"""
+    """ Add all open transaction to a block and wipe the open transaction array"""
     global blockchain
     global open_transaction
 
-    last_block = blockchain[-1] if len(blockchain) else None
-
-    previous_hash = last_block
+    hashed_block = hash_block()
     new_block = {
-        "previous_hash": previous_hash,
+        "previous_hash": hashed_block,
         "index": len(blockchain),
         "transactions": open_transaction,
     }
-    # hashed_block = last_block
-    open_transaction = []
     blockchain.append(new_block)
+    verify_chain()
+    open_transaction = []
+
+
+def hash_block():
+    last_block = get_last_blockchain_value()
+    hashed_block = ""
+    for key in last_block:
+        value = last_block[key]
+        hashed_block = hashed_block + str(value)
+    return hashed_block
 
 
 def grouped_transaction(given_blockchain):
@@ -81,17 +90,17 @@ def grouped_transaction(given_blockchain):
             Please choose
             1: Add a new transaction value
             2: Output the blockchain blocs
-            2: Mind transaction
+            3: Mind transaction
             q: To Quit
         """
         user_choice, choice_list = get_user_choice(user_operation_help)
 
-        # choice 1
-        if user_wants_to_add_a_new_transaction(user_choice):
+        if user_wants_to_quit(user_choice):
+            break
+        elif user_wants_to_add_a_new_transaction(user_choice):
             transaction_data = get_user_transaction()
             amount, recipient = transaction_data
             add_transaction(recipient, amount=amount)
-        # choice 2
         elif user_wants_to_output_the_blockchain(user_choice):
             output_blockchain(given_blockchain)
         # choice not handled
@@ -115,6 +124,10 @@ def get_user_choice(user_operation_help):
     choice_list = [str(item+1) for item in range(2)]
     choice_list.append('q')
     return user_choice, choice_list,
+
+
+def user_wants_to_quit(user_choice):
+    return user_choice == "q"
 
 
 def user_wants_to_output_the_blockchain(user_choice):
