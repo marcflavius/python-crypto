@@ -1,6 +1,6 @@
 """ Blockchain lib """
 import re
-
+from functools import reduce
 genesis_block = {
     "previous_hash": "",
     "index": 0,
@@ -188,14 +188,20 @@ def output_open_transactions(open_transactions):
 
 def get_user_balance(user_id):
     global blockchain
-
     last_block = get_last_blockchain_value()
     transactions = last_block['transactions']
     
-    received = sum([block['amount'] for block in transactions if block['recipient'] == user_id ])
-    sent = sum([block['amount'] for block in transactions if block['sender'] == user_id ])
+    def balance(total, transaction):
+        amount=transaction['amount']
+        if transaction['recipient'] == user_id:
+            return total + amount
+        if transaction['sender'] == user_id:
+            return total - amount
+        else:
+            return total
 
-    return received - sent
+    total = reduce(balance, transactions,0)
+    return total
 
 def output_user_balance(user_id):
     balance=get_user_balance(user_id)
