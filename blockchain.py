@@ -1,4 +1,6 @@
 """ Blockchain lib """
+import hashlib as hash
+import json
 import re
 from functools import reduce
 genesis_block = {
@@ -12,6 +14,7 @@ participants = set([owner])
 blockchain = [genesis_block]
 open_transaction = []
 MINING_TRANSACTION = 5
+
 
 def grouped_transaction():
     """ Groupe transaction handler """
@@ -55,6 +58,7 @@ def grouped_transaction():
             # choice 3
             break
 
+
 def verify_chain():
     """ Verify the blockchain integrity """
     block_index = 0
@@ -66,10 +70,12 @@ def verify_chain():
             break
     return is_valid if current_block["previous_hash"] == {} else True
 
+
 def reset_blockchain():
     """ Wipe the blockchain """
     global blockchain
     blockchain = []
+
 
 def get_last_blockchain_value():
     """ Get the last element in the blockchain """
@@ -77,37 +83,41 @@ def get_last_blockchain_value():
     global blockchain
     return blockchain[-1] if len(blockchain) > 0 else genesis_block
 
-def get_user_input(msg):
+
+def get_user_input(msg, append='\n'):
     """ Get a user input """
-    output = input(msg+': \n')
+    output = input(msg + append)
     return output
 
-def get_user_input_raw(msg):
-    """ Get a user input raw apply no format to the message outputted """
-    return input(msg)
-
 # TODO: Marc Flavius - fix sender
+
+
 def add_transaction(recipient, sender="Marc", amount=1.0):
-    """ Add a Item to the blockchain 
-    sender: the sender of the coins. 
+    """ Add a Item to the blockchain
+    sender: the sender of the coins.
     recipient: the recipient of the coins.
     amount: the given transaction amount
     """
     global open_transaction
-    transaction = {"sender": sender, "recipient": recipient, "amount": amount, }
+    transaction = {
+        "sender": sender,
+        "recipient": recipient,
+        "amount": amount,
+    }
     open_transaction.append(transaction)
     participants.add(sender)
     participants.add(recipient)
 
 
 def mine_block():
-    """ Add all open transaction to a block and wipe the open transaction array"""
+    """ Add all open transaction to a block and wipe
+    the open transaction array """
     global blockchain
     global open_transaction
-    reward_transaction =  {
+    reward_transaction = {
         "sender": "MINING",
         "recipient": owner,
-        "amount": MINING_TRANSACTION, 
+        "amount": MINING_TRANSACTION,
     }
     open_transaction.append(reward_transaction)
     hashed_block = hash_block()
@@ -120,57 +130,69 @@ def mine_block():
     verify_chain()
     open_transaction = []
 
+
 def hash_block():
     last_block = get_last_blockchain_value()
     hashed_block = ""
     for key in last_block:
         value = last_block[key]
         hashed_block = hashed_block + str(value)
-    return hashed_block
+    return hash_object(hashed_block)
+
 
 def get_user_transaction():
     """ Get user input transaction"""
-    recipient = (""+get_user_input('Enter the recipient of the transaction: ')).capitalize()
+    recipient = ("" + get_user_input('Enter the recipient of the transaction: ')).capitalize()
     tx_amount = get_numeric_input('Your transaction please: ')
     return tx_amount, recipient
 
+
 def get_numeric_input(input):
-    tx_amount=input
-    match = len(re.findall("[0-9]+$",tx_amount))
+    tx_amount = input
+    match = len(re.findall("[0-9]+$", tx_amount))
     if match != 1:
         print('Please enter a numeric amount\n')
         tx_amount = get_numeric_input(get_user_input(input))
     return int(tx_amount)
 
+
 def get_user_choice(user_operation_help):
     """ Get user choice """
-    user_choice = get_user_input_raw(user_operation_help)
-    choice_list = [str(item+1) for item in range(2)]
+    user_choice = get_user_input(user_operation_help)
+    choice_list = [str(item + 1) for item in range(2)]
     choice_list.append('q')
     return user_choice, choice_list,
 
+
 def user_wants_to_quit(user_choice):
     return user_choice == "q"
+
 
 def user_wants_to_add_a_new_transaction(user_choice):
     """ Check for a new transaction operation """
     return str(user_choice) == '1'
 
+
 def user_wants_to_output_the_blockchain(user_choice):
     """ Check for a output blockchain operation """
     return str(user_choice) == '2'
 
+
 def user_wants_to_mind_new_block(user_choice):
     return str(user_choice) == '3'
+
 
 def user_wants_to_output_participants(user_choice):
     return str(user_choice) == '4'
 
+
 def user_wants_to_output_open_transaction(user_choice):
     return str(user_choice) == '5'
 
+
 def user_wants_to_output_balance(user_choice):
     return str(user_choice) == '6'
+
 
 def output_blockchain(given_blockchain):
     """ Output the block chain """
@@ -178,21 +200,24 @@ def output_blockchain(given_blockchain):
         print('Outputting block...')
         print(block)
 
+
 def output_participant(participants):
     print(participants)
-    return participants 
+    return participants
+
 
 def output_open_transactions(open_transactions):
     print(open_transactions)
     return open_transaction
 
+
 def get_user_balance(user_id):
     global blockchain
     last_block = get_last_blockchain_value()
     transactions = last_block['transactions']
-    
+
     def balance(total, transaction):
-        amount=transaction['amount']
+        amount = transaction['amount']
         if transaction['recipient'] == user_id:
             return total + amount
         if transaction['sender'] == user_id:
@@ -200,13 +225,20 @@ def get_user_balance(user_id):
         else:
             return total
 
-    total = reduce(balance, transactions,0)
+    total = reduce(balance, transactions, 0)
     return total
 
+
 def output_user_balance(user_id):
-    balance=get_user_balance(user_id)
+    balance = get_user_balance(user_id)
     print(balance)
     return balance
+
+
+def hash_object(obj):
+    print('')
+    return hash.sha256(json.dumps(obj).encode()).hexdigest()
+
 
 if __name__ == "__main__":
     grouped_transaction()
