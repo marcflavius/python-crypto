@@ -69,7 +69,6 @@ class Blockchain(unittest.TestCase):
         find_block_salt.called
         hash_block.called
 
-    # @unittest.skip
     @patch(
         "blockchain.get_last_blockchain_value",
         return_value={
@@ -92,7 +91,6 @@ class Blockchain(unittest.TestCase):
         salt = blockchain.find_block_salt(open_transaction, previous_hash)
         self.assertEqual(19, salt)
 
-    # @unittest.skip
     @patch("blockchain.get_last_blockchain_value")
     def test_invalid_proof(self, get_last_blockchain_value):
         blockchain.open_transaction = self.get_open_transaction_stub()
@@ -116,7 +114,6 @@ class Blockchain(unittest.TestCase):
             },
         ]
 
-    # @unittest.skip
     @patch(
         "blockchain.get_last_blockchain_value",
         return_value={
@@ -133,7 +130,6 @@ class Blockchain(unittest.TestCase):
         self.assertEqual(marcBalance, -200)
         get_last_blockchain_value.called
 
-    # @unittest.skip
     def test_it_can_add_a_transaction_to_the_open_transaction_queue(self):
         blockchain.add_transaction(
             recipient="Bob",
@@ -145,18 +141,11 @@ class Blockchain(unittest.TestCase):
             [{"amount": 10, "recipient": "Bob", "sender": "Marc"}],
         )
 
-    # def test_it_can_output_a_given_blockchain(self):
-    #     blockchain.add_transaction(25, blockchain.get_last_blockchain_value())
-    #     blockchain.add_transaction(45, blockchain.get_last_blockchain_value())
-    #     self.assertEqual(blockchain.blockchain,  [[None, 25], [[None, 25], 45]])
-
-    # @unittest.skip
     def test_it_can_add_a_participant(self):
         global blockchain
         blockchain.participants.add("Paul")
         self.assertEqual(blockchain.participants, set({"Paul", "Marc"}))
 
-    # @unittest.skip
     def int_test_blockchain_is_valid(self):
         stub_blockchain = []
         open_transaction = []
@@ -185,41 +174,29 @@ class Blockchain(unittest.TestCase):
         get_last_blockchain_value.called
         self.assertEqual(hash[0:1], "0")
 
-    # @unittest.skip
     def test_it_can_list_participants(self):
         participants = set({"Marc"})
         self.assertEqual(blockchain.output_participant(participants), participants)
 
-    # @unittest.skip
     def test_it_can_output_user_balance(self):
         blockchain.blockchain = self.get_blockchain_stub()
         self.assertEqual(blockchain.get_user_balance("Marc"), -200)
 
-    # @unittest.skip
-    # def test_it_can_mine_open_transactions(self):
-    # self.assertEqual(blockchain.output_user_balance())
-
-    # @unittest.skip
     def test_user_wants_to_add_a_new_transaction(self):
         self.assertTrue(blockchain.user_wants_to_add_a_new_transaction(1))
 
-    # @unittest.skip
     def test_user_wants_to_output_the_blockchain(self):
         self.assertTrue(blockchain.user_wants_to_output_the_blockchain(2))
 
-    # @unittest.skip
     def test_user_wants_to_mind_new_block(self):
         self.assertTrue(blockchain.user_wants_to_mind_new_block(3))
 
-    # @unittest.skip
     def test_user_wants_to_output_participants(self):
         self.assertTrue(blockchain.user_wants_to_output_participants(4))
 
-    # @unittest.skip
     def test_user_wants_to_output_the_blockchain_falsy(self):
         self.assertFalse(blockchain.user_wants_to_add_a_new_transaction(None))
 
-    # @unittest.skip
     def test_user_wants_to_add_a_new_transaction_falsy(self):
         self.assertFalse(blockchain.user_wants_to_add_a_new_transaction(None))
 
