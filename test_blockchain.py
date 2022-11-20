@@ -6,6 +6,7 @@ genesis_block = {
     "previous_hash": "GENESIS_BLOCK",
     "index": 0,
     "transactions": [],
+    "salt": 22,
 }
 derived_from_genesis_block = {
     "previous_hash": "076f74c1e78bceb14a65775013948f24eaacc3ac1bc7e3e911fe4aa3ae198c7",
@@ -32,16 +33,10 @@ class Blockchain(unittest.TestCase):
         open_transaction = []
         blockchain.mine_block(given_blockchain, open_transaction)
         self.assertEqual(len(given_blockchain), 3)
-        self.assertEqual(
-            given_blockchain[2]["previous_hash"],
-            "030e0c7cf43ce5ee6ff024185ee40566be4432c0966f74c47285352c7cf4263c",
-        )
-        self.assertEqual(given_blockchain[2]["index"], 2)
-        self.assertEqual(given_blockchain[2]["salt"], 15)
-        self.assertEqual(
-            given_blockchain[2]["transactions"],
-            [{"sender": "MINING", "recipient": "Marc", "amount": 5}],
-        )
+        self.assertEqual(given_blockchain[2]['previous_hash'], '030e0c7cf43ce5ee6ff024185ee40566be4432c0966f74c47285352c7cf4263c')
+        self.assertEqual(given_blockchain[2]['index'], 2)
+        self.assertEqual(given_blockchain[2]['index'], 2)
+
 
     @patch("blockchain.find_block_salt", return_value=22)
     def test_verify_the_chain_with_one_block(self, find_block_salt):
@@ -50,12 +45,10 @@ class Blockchain(unittest.TestCase):
         self.assertEqual(valid, True)
         find_block_salt.called
 
-    @patch("blockchain.find_block_salt", return_value=22)
-    def test_verify_the_chain_with_multi_block_fail(self, find_open_transaction_salt):
+    def test_verify_the_chain_with_multi_block_fail(self):
         blockchain.blockchain = [genesis_block, genesis_block]
         valid = blockchain.verify_chain(blockchain.blockchain)
         self.assertEqual(valid, False)
-        find_open_transaction_salt.called
 
     @patch("blockchain.find_block_salt", return_value=22)
     @patch(

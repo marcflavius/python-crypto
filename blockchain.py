@@ -68,10 +68,8 @@ def verify_chain(blockchain):
         if _is_first_block(block_index):
             # skip verification
             continue
-        # compute previous hash
         prev_block = blockchain[prev_index]
-        transactions = prev_block["transactions"]
-        salt = find_block_salt(transactions, previous_hash)
+        salt = prev_block["salt"]
         previous_hash = hash_block(salt, previous_hash, prev_block)
         
         if previous_hash != current_block["previous_hash"]:
