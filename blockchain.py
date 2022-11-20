@@ -90,10 +90,6 @@ def _is_first_block(block_index):
     return block_index == 0
 
 
-def _blockchain_has_multiple_block(blockchain):
-    return len(blockchain) > 1
-
-
 def _blockchain_has_zero_or_one_block(blockchain):
     return len(blockchain) <= 1
 
