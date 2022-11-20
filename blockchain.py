@@ -3,6 +3,14 @@ import hashlib as hash
 import re
 from functools import reduce
 
+# TODO: Add copy transaction mechanism in case verify chain fails [:]
+# TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
+# TODO: Add divide and  logic to specialize class
+# TODO: Add persist blockchain state load_data() save_data()
+# TODO: Add pickle to store binary data (can be swapped by json)
+# TODO: Add try catch to IO operations
+# TODO: Add OOP members transaction, block, verification, node
+
 genesis_block = {"previous_hash": "", "index": 0, "transactions": []}
 
 owner = "Marc"
