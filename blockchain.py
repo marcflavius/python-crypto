@@ -67,7 +67,7 @@ def verify_chain(blockchain):
     """Verify the blockchain integrity"""
     block_index = -1
     is_valid = True
-    previous_hash = ""
+    compute_previous_hash = ""
     for current_block in blockchain:
         block_index = block_index + 1
         prev_index = block_index - 1
@@ -77,10 +77,13 @@ def verify_chain(blockchain):
             # skip verification
             continue
         prev_block = blockchain[prev_index]
-        salt = prev_block["salt"]
-        previous_hash = hash_block(salt, previous_hash, prev_block)
+        prev_block_prev_hash = prev_block['previous_hash']
+        hash_to_check = current_block["previous_hash"]
+        salt = current_block["salt"]
+        # salt = find_block_salt(current_block['transactions'], prev_block_prev_hash) #debug
+        compute_previous_hash = hash_block(current_block['transactions'], prev_block_prev_hash, salt)
         
-        if previous_hash != current_block["previous_hash"]:
+        if compute_previous_hash != hash_to_check:
             is_valid = False
             break
     return is_valid
@@ -138,6 +141,7 @@ def mine_block(blockchain, open_transaction):
     """Add all open transaction to a block and wipe
     the open transaction array"""
     previous_hash = get_last_blockchain_value(blockchain)["previous_hash"]
+    old_blockchain = blockchain[:]
     reward_transaction = {
         "sender": "MINING",
         "recipient": owner,
@@ -154,8 +158,18 @@ def mine_block(blockchain, open_transaction):
         "salt": salt,
     }
     blockchain.append(new_block)
-    verify_chain(blockchain)
-    open_transaction = []
+
+    valid = verify_chain(blockchain)
+    if valid:
+        open_transaction = []
+        logger('Block added!')
+    else:
+        #revert 
+        blockchain = old_blockchain
+        logger('Invalid chain!')
+
+def logger(msg):
+    print(msg)
 
 
 def hash_block(open_transaction, previous_hash, salt):
@@ -275,6 +289,15 @@ def stringify_decoded_hash(open_transaction, previous_hash, salt):
 
 
 def find_block_salt(transactions, previous_hash):
+    """_summary_
+
+    Args:
+        transactions (list): open transaction
+        previous_hash (str): previous hash stored on last block in the chain
+
+    Returns:
+        _type_: int
+    """    
     salt = -1
     valid = False
     while valid is not True:
