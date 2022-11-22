@@ -50,6 +50,7 @@ class Blockchain(unittest.TestCase):
         self, get_last_blockchain_value, hash_block, verify_chain, logger
     ):
         given_blockchain = [genesis_block, derived_from_genesis_block]
+        init_blockchain = given_blockchain[:]
         open_transaction = []
         blockchain.mine_block(given_blockchain, open_transaction)
         self.assertEqual(len(given_blockchain), 3)
@@ -60,6 +61,8 @@ class Blockchain(unittest.TestCase):
         verify_chain.called
         logger.called
         blockchain.logger.assert_called_with("Block added!")
+        self.assertEqual(len(init_blockchain), 2)
+        self.assertEqual(len(given_blockchain), 3)
 
     @patch(
         "blockchain.get_last_blockchain_value", side_effect=[derived_from_genesis_block]
@@ -79,15 +82,15 @@ class Blockchain(unittest.TestCase):
         init_blockchain = given_blockchain[:]
         open_transaction = []
         blockchain.mine_block(given_blockchain, open_transaction)
-        self.assertEqual(len(given_blockchain), 3)
-        self.assertEqual(given_blockchain[2]["index"], 2)
-        self.assertEqual(given_blockchain[2]["index"], 2)
+        self.assertEqual(given_blockchain[0]["index"], 0)
+        self.assertEqual(given_blockchain[1]["index"], 1)
         get_last_blockchain_value.called
         hash_block.called
         verify_chain.called
         logger.called
-        blockchain.get_last_blockchain_value.called_with(init_blockchain)
         blockchain.logger.called_with("Invalid chain!")
+        self.assertEqual(len(init_blockchain), 2)
+        self.assertEqual(len(given_blockchain), 2)
 
     @patch("blockchain.find_block_salt", return_value=22)
     def test_verify_the_chain_with_one_block(self, find_block_salt):
