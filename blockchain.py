@@ -4,7 +4,6 @@ import re
 from functools import reduce
 
 # TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
-# TODO: Add divide and  logic to specialize class
 # TODO: Add persist blockchain state load_data() save_data()
 # TODO: Add pickle to store binary data (can be swapped by json)
 # TODO: Add try catch to IO operations
@@ -62,6 +61,10 @@ def grouped_transaction():
             break
 
 
+def save_blockchain(blockchain):
+    with open('blockchain.txt', encoding = 'utf-8', mode='w') as f:
+        f.write(str(blockchain) + "\n" + str(open_transaction))
+        
 def verify_chain(blockchain):
     """Verify the blockchain integrity"""
     block_index = -1
@@ -161,11 +164,17 @@ def mine_block(blockchain, open_transaction):
     valid = verify_chain(blockchain)
     if valid:
         open_transaction = []
+        save_blockchain(blockchain)
         logger('Block added!')
     else:
         #revert 
-        blockchain = old_blockchain
+        revert_chain(blockchain, old_blockchain)
         logger('Invalid chain!')
+
+def revert_chain(blockchain, old_blockchain):
+    blockchain.clear()
+    for block in old_blockchain:
+        blockchain.append(block)
 
 def logger(msg):
     print(msg)
