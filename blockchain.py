@@ -3,7 +3,6 @@ import hashlib as hash
 import re
 from functools import reduce
 
-# TODO: Add copy transaction mechanism in case verify chain fails [:]
 # TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
 # TODO: Add divide and  logic to specialize class
 # TODO: Add persist blockchain state load_data() save_data()
