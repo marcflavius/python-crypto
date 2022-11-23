@@ -1,6 +1,7 @@
 """ Blockchain lib """
 import hashlib as hash
 import re
+import json
 from functools import reduce
 
 # TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
@@ -9,16 +10,21 @@ from functools import reduce
 # TODO: Add try catch to IO operations
 # TODO: Add OOP members transaction, block, verification, node
 
-genesis_block = {"previous_hash": "", "index": 0, "transactions": []}
+genesis_block = {
+    "previous_hash": "GENESIS_BLOCK",
+    "index": 0,
+    "transactions": [],
+    "salt": 22,
+}
 
 owner = "Marc"
 participants = set([owner])
-blockchain = [genesis_block]
+blockchain = []
 open_transaction = []
 MINING_TRANSACTION = 5
 
 
-def grouped_transaction():
+def controller():
     """Groupe transaction handler"""
     global participants
     global open_transaction
@@ -61,10 +67,33 @@ def grouped_transaction():
             break
 
 
-def save_blockchain(blockchain):
-    with open('blockchain.txt', encoding = 'utf-8', mode='w') as f:
-        f.write(str(blockchain) + "\n" + str(open_transaction))
-        
+def save_blockchain(blockchain, open_transaction):
+    with open("blockchain.txt", encoding="utf-8", mode="w") as f:
+        data = json.dumps(
+            {
+                "blockchain": blockchain,
+                "open_transaction": open_transaction,
+            },
+            indent=4,
+        )
+        f.write(data)
+
+
+def load_blockchain():
+    global blockchain
+    global open_transaction
+    try:
+        with open("blockchain.txt", encoding="utf-8", mode="r") as f:
+            data = json.load(f)
+            blockchain = data['blockchain']
+            open_transaction = data['open_transaction']
+    except (IOError, json.JSONDecodeError):
+        logger('Can\'t load blockchain');
+    if len(blockchain) == 0:
+            logger('Init blockchain')
+            blockchain.append(genesis_block)
+
+
 def verify_chain(blockchain):
     """Verify the blockchain integrity"""
     block_index = -1
@@ -79,16 +108,18 @@ def verify_chain(blockchain):
             # skip verification
             continue
         prev_block = blockchain[prev_index]
-        prev_block_prev_hash = prev_block['previous_hash']
+        prev_block_prev_hash = prev_block["previous_hash"]
         hash_to_check = current_block["previous_hash"]
         salt = current_block["salt"]
         # salt = find_block_salt(current_block['transactions'], prev_block_prev_hash) #debug
-        compute_previous_hash = hash_block(current_block['transactions'], prev_block_prev_hash, salt)
-        
+        compute_previous_hash = hash_block(
+            current_block["transactions"], prev_block_prev_hash, salt
+        )
+
         if compute_previous_hash != hash_to_check:
             is_valid = False
             break
-    return is_valid
+    return (is_valid, block_index)
 
 
 def _is_first_block(block_index):
@@ -105,7 +136,7 @@ def reset_blockchain():
     blockchain = []
 
 
-def get_last_blockchain_value(givin_blockchain = None):
+def get_last_blockchain_value(givin_blockchain=None):
     """Get the last element in the blockchain"""
     global genesis_block
     global blockchain
@@ -161,20 +192,22 @@ def mine_block(blockchain, open_transaction):
     }
     blockchain.append(new_block)
 
-    valid = verify_chain(blockchain)
+    valid, index = verify_chain(blockchain)
     if valid:
-        open_transaction = []
-        save_blockchain(blockchain)
-        logger('Block added!')
+        open_transaction.clear()
+        save_blockchain(blockchain, open_transaction)
+        logger("Block added!")
     else:
-        #revert 
+        # revert
         revert_chain(blockchain, old_blockchain)
-        logger('Invalid chain!')
+        logger("Invalid chain! at index {}".format(index) )
+
 
 def revert_chain(blockchain, old_blockchain):
     blockchain.clear()
     for block in old_blockchain:
         blockchain.append(block)
+
 
 def logger(msg):
     print(msg)
@@ -305,7 +338,7 @@ def find_block_salt(transactions, previous_hash):
 
     Returns:
         _type_: int
-    """    
+    """
     salt = -1
     valid = False
     while valid is not True:
@@ -314,6 +347,10 @@ def find_block_salt(transactions, previous_hash):
     return salt
 
 
+def main():
+    load_blockchain()
+    controller()
+    logger("God Bye!")
+
 if __name__ == "__main__":
-    grouped_transaction()
-    print("God Bye!")
+    main()
