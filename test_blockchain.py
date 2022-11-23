@@ -35,6 +35,17 @@ class Blockchain(unittest.TestCase):
         return super().tearDown()
 
     # (start)
+    @patch("blockchain.load_blockchain")
+    @patch("blockchain.controller")
+    @patch("blockchain.logger")
+    def test_main(self, load_blockchain, controller, looger):
+        blockchain.main()
+        assert load_blockchain.called
+        assert controller.called
+        assert looger.called
+        blockchain.logger.called_with("Good Bye!")
+        self.assertEqual(blockchain.blockchain, [])
+
     @patch(
         "blockchain.get_last_blockchain_value", side_effect=[derived_from_genesis_block]
     )
@@ -44,7 +55,7 @@ class Blockchain(unittest.TestCase):
             "0412a7b5869a471587e0fa102ad717055fbcde7e2fd2c22c03f0590f71f71b96"
         ],
     )
-    @patch("blockchain.verify_chain", side_effect=[True, True])
+    @patch("blockchain.verify_chain", side_effect=[(True, 0), (True, 1)])
     @patch("blockchain.logger")
     def test_mind_block_success(
         self, get_last_blockchain_value, hash_block, verify_chain, logger
@@ -73,7 +84,7 @@ class Blockchain(unittest.TestCase):
             "0412a7b5869a471587e0fa102ad717055fbcde7e2fd2c22c03f0590f71f71b96"
         ],
     )
-    @patch("blockchain.verify_chain", side_effect=[False])
+    @patch("blockchain.verify_chain", side_effect=[(False, 0)])
     @patch("blockchain.logger")
     def test_mind_block_fails(
         self, get_last_blockchain_value, hash_block, verify_chain, logger
@@ -96,30 +107,30 @@ class Blockchain(unittest.TestCase):
     def test_verify_the_chain_with_one_block(self, find_block_salt):
         blockchain.blockchain = [genesis_block]
         valid = blockchain.verify_chain(blockchain.blockchain)
-        self.assertEqual(valid, True)
+        self.assertEqual(valid, (True, 0))
         find_block_salt.called
 
     def test_verify_the_chain_with_multi_block_fail(self):
         blockchain.blockchain = [genesis_block, genesis_block]
         valid = blockchain.verify_chain(blockchain.blockchain)
-        self.assertEqual(valid, False)
+        self.assertEqual(valid, (False, 1))
 
     @patch("blockchain._blockchain_has_zero_or_one_block", return_value=False)
     @patch("blockchain._is_first_block", side_effect=[True, False])
     @patch(
-    "blockchain.hash_block",
-    return_value="0cdfe6d341443fb03e149add1696d83da65e8ca9ed7a19e28cda0212c45dbf89",
+        "blockchain.hash_block",
+        return_value="0cdfe6d341443fb03e149add1696d83da65e8ca9ed7a19e28cda0212c45dbf89",
     )
     def test_verify_the_chain_with_multi_block(
         self,
         _blockchain_has_zero_or_one_block,
         _is_first_block,
-         hash_block,
+        hash_block,
     ):
         stub_blockchain = [genesis_block, derived_from_genesis_block]
         init_stub_blockchain = stub_blockchain[:]
         valid = blockchain.verify_chain(stub_blockchain)
-        self.assertEqual(valid, True)
+        self.assertEqual(valid, (True,1))
         assert _blockchain_has_zero_or_one_block.called
         blockchain._blockchain_has_zero_or_one_block.assert_called_with(
             init_stub_blockchain
@@ -217,7 +228,7 @@ class Blockchain(unittest.TestCase):
 
     @patch("blockchain.get_user_input", side_effect=["1", "Bob", "10", "q"])
     def test_add_transaction_api(self, get_user_input):
-        blockchain.grouped_transaction()
+        blockchain.controller()
         assert get_user_input.called
 
     @patch("blockchain.get_last_blockchain_value")
