@@ -63,7 +63,7 @@ def controller():
         elif user_choice not in choice_list:
             print("Input invalid, please choose a listed choice")
         else:
-            # choice 3
+            # choice quit
             break
 
 
