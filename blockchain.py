@@ -14,9 +14,8 @@ genesis_block = {
     "previous_hash": "GENESIS_BLOCK",
     "index": 0,
     "transactions": [],
-    "salt": 22,
 }
-
+blockchain_location_path = "blockchain.txt"
 owner = "Marc"
 participants = set([owner])
 blockchain = []
