@@ -2,6 +2,7 @@ __pycache__/
 **/*.pyc
 python3.6m.exe.stackdump
 blockchain.txt
+test_blockchain.txt
 lib
 bin
 include
