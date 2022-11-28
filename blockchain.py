@@ -3,6 +3,7 @@ import hashlib as hash
 import re
 import json
 from functools import reduce
+from os.path import exists
 
 # TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
 # TODO: Add persist blockchain state load_data() save_data()
@@ -67,7 +68,8 @@ def controller():
 
 
 def save_blockchain(blockchain, open_transaction):
-    with open("blockchain.txt", encoding="utf-8", mode="w") as f:
+    global blockchain_location_path
+    with open(blockchain_location_path, encoding="utf-8", mode="w") as f:
         data = json.dumps(
             {
                 "blockchain": blockchain,
@@ -78,19 +80,39 @@ def save_blockchain(blockchain, open_transaction):
         f.write(data)
 
 
-def load_blockchain():
+def load_blockchain(blockchain_location_path):
+    global blockchain
+    global open_transaction
+    file_exists = exists(blockchain_location_path)
+    if not file_exists:
+        create_blockchain_file_store(blockchain_location_path)
+    hydrate_blockchain(blockchain_location_path)
+    if len(blockchain) == 0:
+        logger("Init blockchain")
+        blockchain.append(genesis_block)
+
+
+def hydrate_blockchain(blockchain_location_path):
     global blockchain
     global open_transaction
     try:
-        with open("blockchain.txt", encoding="utf-8", mode="r") as f:
+        with open(blockchain_location_path, encoding="utf-8", mode="r") as f:
             data = json.load(f)
-            blockchain = data['blockchain']
-            open_transaction = data['open_transaction']
+            blockchain = data["blockchain"]
+            open_transaction = data["open_transaction"]
     except (IOError, json.JSONDecodeError):
-        logger('Can\'t load blockchain');
-    if len(blockchain) == 0:
-            logger('Init blockchain')
-            blockchain.append(genesis_block)
+        logger("Can't load blockchain, check file permission")
+    return blockchain, open_transaction
+
+
+def create_blockchain_file_store(blockchain_location_path):
+    global blockchain
+    global open_transaction
+    try:
+        with open(blockchain_location_path, encoding="utf-8", mode="w"):
+            save_blockchain(blockchain, open_transaction)
+    except IOError:
+        logger("Can't create the file {}".format(blockchain_location_path))
 
 
 def verify_chain(blockchain):
@@ -159,6 +181,7 @@ def add_transaction(recipient, sender="Marc", amount=1.0):
     amount: the given transaction amount
     """
     global open_transaction
+
     transaction = {
         "sender": sender,
         "recipient": recipient,
@@ -167,6 +190,7 @@ def add_transaction(recipient, sender="Marc", amount=1.0):
     open_transaction.append(transaction)
     participants.add(sender)
     participants.add(recipient)
+    save_blockchain(blockchain, open_transaction)
 
 
 def mine_block(blockchain, open_transaction):
@@ -186,20 +210,20 @@ def mine_block(blockchain, open_transaction):
     new_block = {
         "previous_hash": current_hash,
         "index": len(blockchain),
-        "transactions": open_transaction,
+        "transactions": open_transaction[:],
         "salt": salt,
     }
     blockchain.append(new_block)
 
     valid, index = verify_chain(blockchain)
     if valid:
+        save_blockchain(blockchain, [])
         open_transaction.clear()
-        save_blockchain(blockchain, open_transaction)
         logger("Block added!")
     else:
         # revert
         revert_chain(blockchain, old_blockchain)
-        logger("Invalid chain! at index {}".format(index) )
+        logger("Invalid chain! at index {}".format(index))
 
 
 def revert_chain(blockchain, old_blockchain):
@@ -347,9 +371,12 @@ def find_block_salt(transactions, previous_hash):
 
 
 def main():
-    load_blockchain()
+    global blockchain_location_path
+
+    load_blockchain(blockchain_location_path)
     controller()
     logger("God Bye!")
+
 
 if __name__ == "__main__":
     main()
