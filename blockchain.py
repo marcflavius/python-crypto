@@ -262,9 +262,8 @@ def get_numeric_input(input):
 
 def get_user_choice(user_operation_help):
     """Get user choice"""
+    choice_list = re.findall("[0-9-q]+(?=:)", user_operation_help)
     user_choice = get_user_input(user_operation_help)
-    choice_list = [str(item + 1) for item in range(2)]
-    choice_list.append("q")
     return (
         user_choice,
         choice_list,
