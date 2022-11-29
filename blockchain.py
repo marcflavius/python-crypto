@@ -83,7 +83,7 @@ def save_blockchain(blockchain, open_transaction):
 def load_blockchain(blockchain_location_path):
     global blockchain
     global open_transaction
-    file_exists = exists(blockchain_location_path)
+    file_exists = blockchain_exists(blockchain_location_path)
     if not file_exists:
         create_blockchain_file_store(blockchain_location_path)
     hydrate_blockchain(blockchain_location_path)
@@ -91,6 +91,8 @@ def load_blockchain(blockchain_location_path):
         logger("Init blockchain")
         blockchain.append(genesis_block)
 
+def blockchain_exists(blockchain_location_path):
+    exists(blockchain_location_path)
 
 def hydrate_blockchain(blockchain_location_path):
     global blockchain

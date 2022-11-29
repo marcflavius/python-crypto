@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
 import blockchain
+from os.path import exists
 
 genesis_block = {
     "previous_hash": "GENESIS_BLOCK",
@@ -35,6 +36,65 @@ class Blockchain(unittest.TestCase):
         return super().tearDown()
 
     # (start)
+    
+    def test_save_blockchain_success(self):
+        blockchain.save_blockchain(blockchain.blockchain, blockchain.open_transaction)
+    @patch("blockchain.logger")
+    @patch("blockchain.hydrate_blockchain")
+    @patch("blockchain.create_blockchain_file_store")
+    @patch("blockchain.blockchain_exists", return_value=False)
+    def test_load_blockchain_create_filestore_success(
+        self,
+        exists,
+        create_blockchain_file_store,
+        hydrate_blockchain,
+        logger,
+    ):
+        blockchain.blockchain = []
+        blockchain.load_blockchain("test_blockchain.txt")
+        assert exists.called
+        assert create_blockchain_file_store.called
+        assert hydrate_blockchain.called
+        assert logger.called
+        assert blockchain.logger.called_with("Init blockchain")
+
+    @patch("blockchain.logger")
+    @patch("blockchain.hydrate_blockchain")
+    @patch("blockchain.create_blockchain_file_store")
+    @patch("blockchain.blockchain_exists", return_value=True)
+    def test_load_blockchain_init_success(
+        self,
+        exists,
+        create_blockchain_file_store,
+        hydrate_blockchain,
+        logger,
+    ):
+        blockchain.blockchain = []
+        blockchain.load_blockchain("test_blockchain.txt")
+        assert exists.called
+        assert not create_blockchain_file_store.called
+        assert hydrate_blockchain.called
+        assert logger.called
+        assert blockchain.logger.called_with("Init blockchain")
+
+    @patch("blockchain.logger")
+    @patch("blockchain.hydrate_blockchain")
+    @patch("blockchain.create_blockchain_file_store")
+    @patch("blockchain.blockchain_exists", return_value=True)
+    def test_load_blockcain_reload_success(
+        self,
+        exists,
+        create_blockchain_file_store,
+        hydrate_blockchain,
+        logger,
+    ):
+        blockchain.blockchain = [genesis_block]
+        blockchain.load_blockchain("test_blockchain.txt")
+        assert exists.called
+        assert not create_blockchain_file_store.called
+        assert hydrate_blockchain.called
+        assert not logger.called
+
     @patch("blockchain.load_blockchain")
     @patch("blockchain.controller")
     @patch("blockchain.logger")
@@ -60,20 +120,25 @@ class Blockchain(unittest.TestCase):
     def test_mind_block_success(
         self, get_last_blockchain_value, hash_block, verify_chain, logger
     ):
-        given_blockchain = [genesis_block, derived_from_genesis_block]
-        init_blockchain = given_blockchain[:]
-        open_transaction = []
-        blockchain.mine_block(given_blockchain, open_transaction)
-        self.assertEqual(len(given_blockchain), 3)
-        self.assertEqual(given_blockchain[2]["index"], 2)
-        self.assertEqual(given_blockchain[2]["index"], 2)
+        init_blockchain = [genesis_block, derived_from_genesis_block]
+        blockchain.blockchain = init_blockchain[:]
+        blockchain.open_transaction.append(
+            {"sender": "Marc", "recipient": "Bob", "amount": 100}
+        )
+        blockchain.mine_block(blockchain.blockchain, blockchain.open_transaction)
+        self.assertEqual(len(blockchain.blockchain), 3)
+        self.assertEqual(blockchain.blockchain[0]["index"], 0)
+        self.assertEqual(blockchain.blockchain[1]["index"], 1)
+        self.assertEqual(blockchain.blockchain[2]["index"], 2)
         get_last_blockchain_value.called
         hash_block.called
         verify_chain.called
         logger.called
         blockchain.logger.assert_called_with("Block added!")
         self.assertEqual(len(init_blockchain), 2)
-        self.assertEqual(len(given_blockchain), 3)
+        self.assertEqual(len(blockchain.blockchain), 3)
+        self.assertEqual(len(blockchain.blockchain[2]["transactions"]), 2)
+        self.assertEqual(len(blockchain.open_transaction), 0)
 
     @patch(
         "blockchain.get_last_blockchain_value", side_effect=[derived_from_genesis_block]
@@ -130,7 +195,7 @@ class Blockchain(unittest.TestCase):
         stub_blockchain = [genesis_block, derived_from_genesis_block]
         init_stub_blockchain = stub_blockchain[:]
         valid = blockchain.verify_chain(stub_blockchain)
-        self.assertEqual(valid, (True,1))
+        self.assertEqual(valid, (True, 1))
         assert _blockchain_has_zero_or_one_block.called
         blockchain._blockchain_has_zero_or_one_block.assert_called_with(
             init_stub_blockchain
@@ -226,10 +291,19 @@ class Blockchain(unittest.TestCase):
         is_valid = blockchain.verify_chain(blockchain)
         self.assertTrue(is_valid)
 
-    @patch("blockchain.get_user_input", side_effect=["1", "Bob", "10", "q"])
-    def test_add_transaction_api(self, get_user_input):
+    @patch("blockchain.get_user_choice", side_effect=[("1", [1]), ("q", ["q"])])
+    @patch("blockchain.get_user_transaction", side_effect=[(10, "Bob")])
+    def test_controller_add_transaction_success(
+        self,
+        get_user_choice,
+        get_user_transaction,
+    ):
         blockchain.controller()
-        assert get_user_input.called
+        assert get_user_choice.called
+        assert get_user_transaction.called
+        assert blockchain.open_transaction == [
+            {"sender": "Marc", "recipient": "Bob", "amount": 10}
+        ]
 
     @patch("blockchain.get_last_blockchain_value")
     def test_hash_a_blockchain(self, get_last_blockchain_value):
@@ -243,6 +317,20 @@ class Blockchain(unittest.TestCase):
             hash = blockchain.hash_block([], previous_hash, salt)
         get_last_blockchain_value.called
         self.assertEqual(hash[0:1], "0")
+
+    @patch("blockchain.get_user_input", side_effect=["1"])
+    def test_get_user_choice(self, get_user_input):
+        user_choice = blockchain.get_user_choice(
+            """
+            Please choose
+            1: Add a new transaction value
+            5: List open transactions
+            6: Output user balance
+            q: To Quit
+        """
+        )
+        assert get_user_input.called
+        self.assertEqual(user_choice, ("1", ["1", "5", "6", "q"]))
 
     def test_it_can_list_participants(self):
         participants = set({"Marc"})
