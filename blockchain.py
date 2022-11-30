@@ -3,7 +3,7 @@ import hashlib as hash
 import re
 import json
 from functools import reduce
-from os.path import exists
+import os.path
 
 # TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
 # TODO: Add persist blockchain state load_data() save_data()
@@ -33,12 +33,12 @@ def controller():
     while True:
         user_operation_help = """
             Please choose
-            1: Add a new transaction value
-            2: Output the blockchain blocs
-            3: Mind transaction
-            4: List participants
-            5: List open transactions
-            6: Output user balance
+            1: Add new transaction
+            2: Output blockchain
+            3: Mind
+            4: Participants
+            5: Open transactions
+            6: Balance
             q: To Quit
         """
         user_choice, choice_list = get_user_choice(user_operation_help)
@@ -69,30 +69,30 @@ def controller():
 
 def save_blockchain(blockchain, open_transaction):
     global blockchain_location_path
-    with open(blockchain_location_path, encoding="utf-8", mode="w") as f:
-        data = json.dumps(
-            {
-                "blockchain": blockchain,
-                "open_transaction": open_transaction,
-            },
-            indent=4,
-        )
-        f.write(data)
+    try:
+        with open(blockchain_location_path, encoding="utf-8", mode="w") as f:
+            data = json.dumps(
+                {
+                    "blockchain": blockchain,
+                    "open_transaction": open_transaction,
+                },
+                indent=4,
+            )
+            f.write(data)
+    except IOError:
+        logger('can\'t write to file {}.'.format(blockchain_location_path))
 
 
 def load_blockchain(blockchain_location_path):
     global blockchain
     global open_transaction
-    file_exists = blockchain_exists(blockchain_location_path)
+    file_exists = os.path.exists(blockchain_location_path)
     if not file_exists:
         create_blockchain_file_store(blockchain_location_path)
     hydrate_blockchain(blockchain_location_path)
     if len(blockchain) == 0:
         logger("Init blockchain")
         blockchain.append(genesis_block)
-
-def blockchain_exists(blockchain_location_path):
-    exists(blockchain_location_path)
 
 def hydrate_blockchain(blockchain_location_path):
     global blockchain
@@ -102,8 +102,10 @@ def hydrate_blockchain(blockchain_location_path):
             data = json.load(f)
             blockchain = data["blockchain"]
             open_transaction = data["open_transaction"]
-    except (IOError, json.JSONDecodeError):
-        logger("Can't load blockchain, check file permission")
+    except IOError:
+        logger("Can't read the blockchain filestore {}".format(blockchain_location_path))
+    except ValueError:
+        logger("{} parse failed, file format incorrect.".format(blockchain_location_path))
     return blockchain, open_transaction
 
 
