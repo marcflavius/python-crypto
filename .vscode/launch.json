@@ -5,18 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Module Python",
-            "type": "python",
-            "request": "launch",
-            "module": "enter-your-module-name",
-            "justMyCode": true
-        },
-        {
             "name": "Python : fichier actif",
+            "request":"launch",
             "type": "python",
-            "program": "${file}",
-            // "console": "integratedTerminal",
-            // "justMyCode": true
+            "program": "${relativeFile}",
+            "console": "internalConsole",
+            "justMyCode": true
         }
     ]
 }
