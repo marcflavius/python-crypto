@@ -1,7 +1,7 @@
+import json
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, mock_open
 import blockchain
-from os.path import exists
 
 genesis_block = {
     "previous_hash": "GENESIS_BLOCK",
@@ -36,14 +36,74 @@ class Blockchain(unittest.TestCase):
         return super().tearDown()
 
     # (start)
-    
-    def test_save_blockchain_success(self):
-        blockchain.save_blockchain(blockchain.blockchain, blockchain.open_transaction)
+    def test_hydrate_blockchain_success(self):
+        open_transaction = [self.generate_transaction()]
+        given_blockchain = [genesis_block, derived_from_genesis_block]
+        data = json.dumps(
+            {
+                "blockchain": given_blockchain,
+                "open_transaction": open_transaction,
+            },
+            indent=4,
+        )
+        with patch("builtins.open", mock_open(read_data=data)):
+            restored_blockchain, open_transaction = blockchain.hydrate_blockchain(
+                "blockchain.txt"
+            )
+            open.assert_called_with("blockchain.txt", encoding="utf-8", mode="r")
+            self.assertEqual(restored_blockchain, given_blockchain)
+            self.assertEqual(open_transaction, open_transaction)
+
+    @patch("blockchain.logger")
+    def test_hydrate_blockchain_fails_on_io_error(self, logger):
+        mockOpen = mock_open()
+        mockOpen.side_effect = IOError
+        with patch("builtins.open", mockOpen):
+            blockchain.hydrate_blockchain("blockchain.txt")
+            logger.assert_called_with(
+                "Can't read the blockchain filestore blockchain.txt"
+            )
+
+    @patch("blockchain.logger")
+    def test_hydrate_blockchain_on_json_parse_error(self, logger):
+        mockOpen = mock_open()
+        mockOpen.side_effect = ValueError
+        with patch("builtins.open", mockOpen):
+            blockchain.hydrate_blockchain("blockchain.txt")
+            logger.assert_called_with(
+                "blockchain.txt parse failed, file format incorrect."
+            )
+
+    def test_save_blockchian_success(self):
+        data = json.dumps(
+            {
+                "blockchain": blockchain.blockchain,
+                "open_transaction": blockchain.open_transaction,
+            },
+            indent=4,
+        )
+        with patch("builtins.open", mock_open()) as file_handle:
+            blockchain.save_blockchain(
+                blockchain.blockchain, blockchain.open_transaction
+            )
+            open.assert_called_with("blockchain.txt", encoding="utf-8", mode="w")
+            file_handle.return_value.write.assert_called_with(data)
+
+    @patch("blockchain.logger")
+    def test_save_blockchian_fails_on_file_access(self, logger):
+        mockOpen = mock_open()
+        mockOpen.side_effect = IOError
+        with patch("builtins.open", mockOpen):
+            blockchain.save_blockchain(
+                blockchain.blockchain, blockchain.open_transaction
+            )
+        logger.assert_called_with("can't write to file blockchain.txt.")
+
     @patch("blockchain.logger")
     @patch("blockchain.hydrate_blockchain")
     @patch("blockchain.create_blockchain_file_store")
-    @patch("blockchain.blockchain_exists", return_value=False)
-    def test_load_blockchain_create_filestore_success(
+    @patch("os.path.exists", return_value=False)
+    def test_load_blockchain_success_on_create_filestore(
         self,
         exists,
         create_blockchain_file_store,
@@ -61,8 +121,8 @@ class Blockchain(unittest.TestCase):
     @patch("blockchain.logger")
     @patch("blockchain.hydrate_blockchain")
     @patch("blockchain.create_blockchain_file_store")
-    @patch("blockchain.blockchain_exists", return_value=True)
-    def test_load_blockchain_init_success(
+    @patch("os.path.exists", return_value=True)
+    def test_load_blockchain_success_on_init_filestore(
         self,
         exists,
         create_blockchain_file_store,
@@ -80,8 +140,8 @@ class Blockchain(unittest.TestCase):
     @patch("blockchain.logger")
     @patch("blockchain.hydrate_blockchain")
     @patch("blockchain.create_blockchain_file_store")
-    @patch("blockchain.blockchain_exists", return_value=True)
-    def test_load_blockcain_reload_success(
+    @patch("os.path.exists", return_value=True)
+    def test_load_blockcain_success_on_filestore_reload(
         self,
         exists,
         create_blockchain_file_store,
@@ -100,6 +160,8 @@ class Blockchain(unittest.TestCase):
     @patch("blockchain.logger")
     def test_main(self, load_blockchain, controller, looger):
         blockchain.main()
+        blockchain.blockchain = []
+        blockchain.open_transaction = [self.generate_transaction()]
         assert load_blockchain.called
         assert controller.called
         assert looger.called
@@ -211,12 +273,15 @@ class Blockchain(unittest.TestCase):
         },
     )
     def test_valid_salt(self, get_last_blockchain_value):
-        open_transaction = [{"sender": "Marc", "recipient": "Bob", "amount": 100}]
+        open_transaction = [self.generate_transaction()]
         previous_hash = blockchain.get_last_blockchain_value()["previous_hash"]
         salt = blockchain.find_block_salt(open_transaction, previous_hash)
         valid = blockchain.valid_salt(open_transaction, previous_hash, 19)
         get_last_blockchain_value.called
         self.assertEqual(valid, True)
+
+    def generate_transaction(self):
+        return {"sender": "Marc", "recipient": "Bob", "amount": 100}
 
     def test_find_block_salt(self):
         open_transaction = [{"sender": "Marc", "recipient": "Bob", "amount": 100}]
