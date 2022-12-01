@@ -3,6 +3,7 @@ import unittest
 from unittest.mock import patch, mock_open
 from block import Block
 import blockchain
+from transaction import Transaction
 
 genesis_block = {
     "previous_hash": "GENESIS_BLOCK",
@@ -35,6 +36,7 @@ class Blockchain(unittest.TestCase):
 
     def tearDown(self) -> None:
         return super().tearDown()
+
     def isfloat(self, num):
         try:
             float(num)
@@ -43,6 +45,17 @@ class Blockchain(unittest.TestCase):
             return False
 
     # (start)
+    
+    
+    def test_create_transaction_instance(self):
+        givenTransaction = self.generate_transaction()
+        instance = Transaction(givenTransaction)
+        transactionOfInstance = instance.__dict__
+        assert transactionOfInstance["sender"] == givenTransaction["sender"]
+        assert transactionOfInstance["recipient"] == givenTransaction["recipient"]
+        assert transactionOfInstance["amount"] == givenTransaction["amount"]
+        assert self.isfloat(transactionOfInstance['created_at']) 
+
     def test_create_block_instance(self):
         instance = Block(genesis_block)
         block = instance.__dict__
