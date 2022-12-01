@@ -7,10 +7,11 @@ from verification import Verification
 
 # TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
 # TODO: Add pickle to store binary data (can be swapped by json)
-# TODO: Add OOP members,
+# TODO: Add OOP 
+# members,
 # transaction - done, 
 # block - done, 
-# verification, 
+# verification - done, 
 # node
 # TODO: Add OOP create a printable helper class to output class __repr__
 
