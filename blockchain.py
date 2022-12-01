@@ -1,9 +1,9 @@
 """ Blockchain lib """
-import hashlib as hash
 import re
 import json
 from functools import reduce
 import os.path
+from verification import Verification
 
 # TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
 # TODO: Add pickle to store binary data (can be swapped by json)
@@ -122,40 +122,6 @@ def create_blockchain_file_store(blockchain_location_path):
         logger("Can't create the file {}".format(blockchain_location_path))
 
 
-def verify_chain(blockchain):
-    """Verify the blockchain integrity"""
-    block_index = -1
-    is_valid = True
-    compute_previous_hash = ""
-    for current_block in blockchain:
-        block_index = block_index + 1
-        prev_index = block_index - 1
-        if _blockchain_has_zero_or_one_block(blockchain):
-            break
-        if _is_first_block(block_index):
-            # skip verification
-            continue
-        prev_block = blockchain[prev_index]
-        prev_block_prev_hash = prev_block["previous_hash"]
-        hash_to_check = current_block["previous_hash"]
-        salt = current_block["salt"]
-        # salt = find_block_salt(current_block['transactions'], prev_block_prev_hash) #debug
-        compute_previous_hash = hash_block(
-            current_block["transactions"], prev_block_prev_hash, salt
-        )
-
-        if compute_previous_hash != hash_to_check:
-            is_valid = False
-            break
-    return (is_valid, block_index)
-
-
-def _is_first_block(block_index):
-    return block_index == 0
-
-
-def _blockchain_has_zero_or_one_block(blockchain):
-    return len(blockchain) <= 1
 
 
 def reset_blockchain():
@@ -212,8 +178,8 @@ def mine_block(blockchain, open_transaction):
     }
     open_transaction.append(reward_transaction)
     # hashing
-    salt = find_block_salt(open_transaction, previous_hash)
-    current_hash = hash_block(open_transaction, previous_hash, salt)
+    salt = Verification.find_block_salt(open_transaction, previous_hash)
+    current_hash = Verification.hash_block(open_transaction, previous_hash, salt)
     new_block = {
         "previous_hash": current_hash,
         "index": len(blockchain),
@@ -222,7 +188,7 @@ def mine_block(blockchain, open_transaction):
     }
     blockchain.append(new_block)
 
-    valid, index = verify_chain(blockchain)
+    valid, index = Verification.verify_chain(blockchain)
     if valid:
         save_blockchain(blockchain, [])
         open_transaction.clear()
@@ -243,10 +209,7 @@ def logger(msg):
     print(msg)
 
 
-def hash_block(open_transaction, previous_hash, salt):
-    return hash.sha256(
-        stringify_decoded_hash(open_transaction, previous_hash, salt)
-    ).hexdigest()
+
 
 
 def get_user_transaction():
@@ -348,32 +311,8 @@ def output_user_balance(user_id):
     return balance
 
 
-def valid_salt(open_transaction, previous_hash, salt):
-    guess = stringify_decoded_hash(open_transaction, previous_hash, salt)
-    guess_hash = hash.sha256(guess).hexdigest()
-    return guess_hash[0:1] == "0"
 
 
-def stringify_decoded_hash(open_transaction, previous_hash, salt):
-    return (str(open_transaction) + str(previous_hash) + str(salt)).encode()
-
-
-def find_block_salt(transactions, previous_hash):
-    """_summary_
-
-    Args:
-        transactions (list): open transaction
-        previous_hash (str): previous hash stored on last block in the chain
-
-    Returns:
-        _type_: int
-    """
-    salt = -1
-    valid = False
-    while valid is not True:
-        salt = salt + 1
-        valid = valid_salt(transactions, previous_hash, salt)
-    return salt
 
 
 def main():
