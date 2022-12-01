@@ -4,6 +4,7 @@ from unittest.mock import patch, mock_open
 from block import Block
 import blockchain
 from transaction import Transaction
+from verification import Verification
 
 genesis_block = {
     "previous_hash": "GENESIS_BLOCK",
@@ -45,8 +46,7 @@ class Blockchain(unittest.TestCase):
             return False
 
     # (start)
-    
-    
+
     def test_create_transaction_instance(self):
         givenTransaction = self.generate_transaction()
         instance = Transaction(givenTransaction)
@@ -54,7 +54,7 @@ class Blockchain(unittest.TestCase):
         assert transactionOfInstance["sender"] == givenTransaction["sender"]
         assert transactionOfInstance["recipient"] == givenTransaction["recipient"]
         assert transactionOfInstance["amount"] == givenTransaction["amount"]
-        assert self.isfloat(transactionOfInstance['created_at']) 
+        assert self.isfloat(transactionOfInstance["created_at"])
 
     def test_create_block_instance(self):
         instance = Block(genesis_block)
@@ -63,7 +63,7 @@ class Blockchain(unittest.TestCase):
         assert block["previous_hash"] == genesis_block["previous_hash"]
         assert block["transactions"] == genesis_block["transactions"]
         assert block["salt"] == genesis_block["salt"]
-        assert self.isfloat(block['created_at']) 
+        assert self.isfloat(block["created_at"])
 
     def test_hydrate_blockchain_success(self):
         open_transaction = [self.generate_transaction()]
@@ -200,13 +200,14 @@ class Blockchain(unittest.TestCase):
     @patch(
         "blockchain.get_last_blockchain_value", side_effect=[derived_from_genesis_block]
     )
-    @patch(
-        "blockchain.hash_block",
+    @patch.object(
+        Verification,
+        "hash_block",
         side_effect=[
             "0412a7b5869a471587e0fa102ad717055fbcde7e2fd2c22c03f0590f71f71b96"
         ],
     )
-    @patch("blockchain.verify_chain", side_effect=[(True, 0), (True, 1)])
+    @patch.object(Verification, "verify_chain", side_effect=[(True, 0), (True, 1)])
     @patch("blockchain.logger")
     def test_mind_block_success(
         self, get_last_blockchain_value, hash_block, verify_chain, logger
@@ -234,13 +235,14 @@ class Blockchain(unittest.TestCase):
     @patch(
         "blockchain.get_last_blockchain_value", side_effect=[derived_from_genesis_block]
     )
-    @patch(
-        "blockchain.hash_block",
+    @patch.object(
+        Verification,
+        "hash_block",
         side_effect=[
             "0412a7b5869a471587e0fa102ad717055fbcde7e2fd2c22c03f0590f71f71b96"
         ],
     )
-    @patch("blockchain.verify_chain", side_effect=[(False, 0)])
+    @patch.object(Verification, "verify_chain", side_effect=[(False, 0)])
     @patch("blockchain.logger")
     def test_mind_block_fails(
         self, get_last_blockchain_value, hash_block, verify_chain, logger
@@ -259,22 +261,23 @@ class Blockchain(unittest.TestCase):
         self.assertEqual(len(init_blockchain), 2)
         self.assertEqual(len(given_blockchain), 2)
 
-    @patch("blockchain.find_block_salt", return_value=22)
+    @patch.object(Verification, "find_block_salt", return_value=22)
     def test_verify_the_chain_with_one_block(self, find_block_salt):
         blockchain.blockchain = [genesis_block]
-        valid = blockchain.verify_chain(blockchain.blockchain)
+        valid = Verification.verify_chain(blockchain.blockchain)
         self.assertEqual(valid, (True, 0))
         find_block_salt.called
 
     def test_verify_the_chain_with_multi_block_fail(self):
         blockchain.blockchain = [genesis_block, genesis_block]
-        valid = blockchain.verify_chain(blockchain.blockchain)
+        valid = Verification.verify_chain(blockchain.blockchain)
         self.assertEqual(valid, (False, 1))
 
-    @patch("blockchain._blockchain_has_zero_or_one_block", return_value=False)
-    @patch("blockchain._is_first_block", side_effect=[True, False])
-    @patch(
-        "blockchain.hash_block",
+    @patch.object(Verification, "_blockchain_has_zero_or_one_block", return_value=False)
+    @patch.object(Verification, "_is_first_block", side_effect=[True, False])
+    @patch.object(
+        Verification,
+        "hash_block",
         return_value="0cdfe6d341443fb03e149add1696d83da65e8ca9ed7a19e28cda0212c45dbf89",
     )
     def test_verify_the_chain_with_multi_block(
@@ -285,15 +288,15 @@ class Blockchain(unittest.TestCase):
     ):
         stub_blockchain = [genesis_block, derived_from_genesis_block]
         init_stub_blockchain = stub_blockchain[:]
-        valid = blockchain.verify_chain(stub_blockchain)
+        valid = Verification.verify_chain(stub_blockchain)
         self.assertEqual(valid, (True, 1))
         assert _blockchain_has_zero_or_one_block.called
-        blockchain._blockchain_has_zero_or_one_block.assert_called_with(
+        Verification._blockchain_has_zero_or_one_block.assert_called_with(
             init_stub_blockchain
         )
         assert _is_first_block.called
         assert hash_block.called
-        blockchain._is_first_block.assert_called_with(1)
+        Verification._is_first_block.assert_called_with(1)
 
     @patch(
         "blockchain.get_last_blockchain_value",
@@ -304,8 +307,8 @@ class Blockchain(unittest.TestCase):
     def test_valid_salt(self, get_last_blockchain_value):
         open_transaction = [self.generate_transaction()]
         previous_hash = blockchain.get_last_blockchain_value()["previous_hash"]
-        salt = blockchain.find_block_salt(open_transaction, previous_hash)
-        valid = blockchain.valid_salt(open_transaction, previous_hash, 19)
+        salt = Verification.find_block_salt(open_transaction, previous_hash)
+        valid = Verification.valid_salt(open_transaction, previous_hash, 19)
         get_last_blockchain_value.called
         self.assertEqual(valid, True)
 
@@ -317,13 +320,13 @@ class Blockchain(unittest.TestCase):
         previous_hash = (
             "076f74c1e78bceb14a65775013948f24eaacc3ac1bc7e3e911fe4aa3ae198c7"
         )
-        salt = blockchain.find_block_salt(open_transaction, previous_hash)
+        salt = Verification.find_block_salt(open_transaction, previous_hash)
         self.assertEqual(19, salt)
 
     @patch("blockchain.get_last_blockchain_value")
     def test_invalid_proof(self, get_last_blockchain_value):
         blockchain.open_transaction = self.get_open_transaction_stub()
-        valid = blockchain.valid_salt(blockchain.open_transaction, "previous_hash", 20)
+        valid = Verification.valid_salt(blockchain.open_transaction, "previous_hash", 20)
         get_last_blockchain_value.called
         self.assertEqual(valid, False)
 
@@ -408,7 +411,7 @@ class Blockchain(unittest.TestCase):
         hash = ""
         while hash[0:1] != "0":
             salt = salt + 1
-            hash = blockchain.hash_block([], previous_hash, salt)
+            hash = Verification.hash_block([], previous_hash, salt)
         get_last_blockchain_value.called
         self.assertEqual(hash[0:1], "0")
 
