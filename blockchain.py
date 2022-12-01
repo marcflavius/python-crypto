@@ -7,7 +7,11 @@ import os.path
 
 # TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
 # TODO: Add pickle to store binary data (can be swapped by json)
-# TODO: Add OOP members transaction, block, verification, node
+# TODO: Add OOP members,
+# transaction, 
+# block - done, 
+# verification, 
+# node
 # TODO: Add OOP create a printable helper class to output class __repr__
 
 genesis_block = {
