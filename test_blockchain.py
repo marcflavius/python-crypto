@@ -1,6 +1,7 @@
 import json
 import unittest
 from unittest.mock import patch, mock_open
+from block import Block
 import blockchain
 
 genesis_block = {
@@ -34,8 +35,23 @@ class Blockchain(unittest.TestCase):
 
     def tearDown(self) -> None:
         return super().tearDown()
+    def isfloat(self, num):
+        try:
+            float(num)
+            return True
+        except ValueError:
+            return False
 
     # (start)
+    def test_create_block_instance(self):
+        instance = Block(genesis_block)
+        block = instance.__dict__
+        assert block["index"] == genesis_block["index"]
+        assert block["previous_hash"] == genesis_block["previous_hash"]
+        assert block["transactions"] == genesis_block["transactions"]
+        assert block["salt"] == genesis_block["salt"]
+        assert self.isfloat(block['created_at']) 
+
     def test_hydrate_blockchain_success(self):
         open_transaction = [self.generate_transaction()]
         given_blockchain = [genesis_block, derived_from_genesis_block]
