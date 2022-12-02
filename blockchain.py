@@ -9,7 +9,7 @@ from verification import Verification
 # TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
 # TODO: Add pickle to store binary data (can be swapped by json)
 # TODO: Add OOP
-# members,
+# members - done,
 # transaction - done,
 # block - done,
 # verification - done,
