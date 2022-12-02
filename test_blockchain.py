@@ -400,7 +400,7 @@ class Blockchain(unittest.TestCase):
         blockchain.mine_block(stub_blockchain, open_transaction)
         blockchain.add_transaction(recipient="Tom", sender="Marc", amount=10)
         blockchain.mine_block(stub_blockchain, open_transaction)
-        is_valid = blockchain.verify_chain(blockchain)
+        is_valid = Verification.verify_chain(blockchain)
         self.assertTrue(is_valid)
 
     @patch("blockchain.get_user_choice", side_effect=[("1", [1]), ("q", ["q"])])
