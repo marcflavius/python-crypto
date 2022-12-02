@@ -51,14 +51,14 @@ class Blockchain(unittest.TestCase):
         instance = Member()
         member_list_type = type(instance.members)
         member_list_size = len(instance.members)
-        assert member_list_type.__name__ == 'set'
+        assert member_list_type.__name__ == "set"
         assert member_list_size == 0
+
     def test_add_a_merber_to_members_instance_success(self):
         instance = Member()
-        instance.add('Marc')
-        instance.add('Paul')
-        assert instance.all() == set(['Marc', 'Paul'])
-
+        instance.add("Marc")
+        instance.add("Paul")
+        assert instance.all() == set(["Marc", "Paul"])
 
     def test_create_transaction_instance(self):
         givenTransaction = self.generate_transaction()

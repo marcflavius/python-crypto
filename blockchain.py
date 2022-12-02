@@ -3,15 +3,16 @@ import re
 import json
 from functools import reduce
 import os.path
+from member import Member
 from verification import Verification
 
 # TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
 # TODO: Add pickle to store binary data (can be swapped by json)
-# TODO: Add OOP 
+# TODO: Add OOP
 # members,
-# transaction - done, 
-# block - done, 
-# verification - done, 
+# transaction - done,
+# block - done,
+# verification - done,
 # node
 # TODO: Add OOP create a printable helper class to output class __repr__
 
@@ -22,7 +23,8 @@ genesis_block = {
 }
 blockchain_location_path = "blockchain.txt"
 owner = "Marc"
-participants = set([owner])
+participants = Member()
+participants.add(owner)
 blockchain = []
 open_transaction = []
 MINING_TRANSACTION = 5
@@ -84,7 +86,7 @@ def save_blockchain(blockchain, open_transaction):
             )
             f.write(data)
     except IOError:
-        logger('can\'t write to file {}.'.format(blockchain_location_path))
+        logger("can't write to file {}.".format(blockchain_location_path))
 
 
 def load_blockchain(blockchain_location_path):
@@ -98,6 +100,7 @@ def load_blockchain(blockchain_location_path):
         logger("Init blockchain")
         blockchain.append(genesis_block)
 
+
 def hydrate_blockchain(blockchain_location_path):
     global blockchain
     global open_transaction
@@ -107,9 +110,13 @@ def hydrate_blockchain(blockchain_location_path):
             blockchain = data["blockchain"]
             open_transaction = data["open_transaction"]
     except IOError:
-        logger("Can't read the blockchain filestore {}".format(blockchain_location_path))
+        logger(
+            "Can't read the blockchain filestore {}".format(blockchain_location_path)
+        )
     except ValueError:
-        logger("{} parse failed, file format incorrect.".format(blockchain_location_path))
+        logger(
+            "{} parse failed, file format incorrect.".format(blockchain_location_path)
+        )
     return blockchain, open_transaction
 
 
@@ -121,8 +128,6 @@ def create_blockchain_file_store(blockchain_location_path):
             save_blockchain(blockchain, open_transaction)
     except IOError:
         logger("Can't create the file {}".format(blockchain_location_path))
-
-
 
 
 def reset_blockchain():
@@ -208,9 +213,6 @@ def revert_chain(blockchain, old_blockchain):
 
 def logger(msg):
     print(msg)
-
-
-
 
 
 def get_user_transaction():
@@ -310,10 +312,6 @@ def output_user_balance(user_id):
     balance = get_user_balance(user_id)
     print(balance)
     return balance
-
-
-
-
 
 
 def main():
