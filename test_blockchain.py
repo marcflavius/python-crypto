@@ -3,6 +3,7 @@ import unittest
 from unittest.mock import patch, mock_open
 from block import Block
 import blockchain
+from member import Member
 from transaction import Transaction
 from verification import Verification
 
@@ -46,6 +47,18 @@ class Blockchain(unittest.TestCase):
             return False
 
     # (start)
+    def test_create_member_instance(self):
+        instance = Member()
+        member_list_type = type(instance.members)
+        member_list_size = len(instance.members)
+        assert member_list_type.__name__ == 'set'
+        assert member_list_size == 0
+    def test_add_a_merber_to_members_instance_success(self):
+        instance = Member()
+        instance.add('Marc')
+        instance.add('Paul')
+        assert instance.all() == set(['Marc', 'Paul'])
+
 
     def test_create_transaction_instance(self):
         givenTransaction = self.generate_transaction()
@@ -326,7 +339,9 @@ class Blockchain(unittest.TestCase):
     @patch("blockchain.get_last_blockchain_value")
     def test_invalid_proof(self, get_last_blockchain_value):
         blockchain.open_transaction = self.get_open_transaction_stub()
-        valid = Verification.valid_salt(blockchain.open_transaction, "previous_hash", 20)
+        valid = Verification.valid_salt(
+            blockchain.open_transaction, "previous_hash", 20
+        )
         get_last_blockchain_value.called
         self.assertEqual(valid, False)
 
