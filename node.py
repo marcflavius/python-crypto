@@ -5,8 +5,8 @@ from blockchain import Blockchain
 
 class Node():
     def __init__(self, blockchain, owner):
-            self.blockchain = blockchain
-            self.owner = owner
+            self.blockchain: Blockchain = blockchain
+            self.owner: str = owner
 
     """ User interface """
     def controller(self):
@@ -33,11 +33,11 @@ class Node():
             elif self.user_wants_to_output_the_blockchain(user_choice):
                 self.blockchain.output_blockchain(self.blockchain.blockchain)
             elif self.user_wants_to_mind_new_block(user_choice):
-                self.blockchain.mine_block(self.blockchain.blockchain, self.blockchain.open_transaction)
+                self.blockchain.mine_block()
             elif self.user_wants_to_output_open_transaction(user_choice):
                 self.blockchain.output_open_transactions(self.blockchain.open_transaction)
             elif self.user_wants_to_output_participants(user_choice):
-                self.blockchain.output_participant(self.blockchain.participants)
+                self.blockchain.output_participant()
             elif self.user_wants_to_output_balance(user_choice):
                 self.blockchain.output_user_balance(self.owner)
             # choice not handled
