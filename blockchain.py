@@ -65,7 +65,9 @@ class Blockchain:
         self.open_transaction.append(reward_transaction)
         # hashing
         salt = Verification.find_block_salt(self.open_transaction, previous_hash)
-        current_hash = Verification.hash_block(self.open_transaction, previous_hash, salt)
+        current_hash = Verification.hash_block(
+            self.open_transaction, previous_hash, salt
+        )
         new_block = {
             "previous_hash": current_hash,
             "index": len(self.blockchain),
