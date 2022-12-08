@@ -32,9 +32,7 @@ falsy_derivation_of_genesis_block = {
 
 class TestBlockchain(unittest.TestCase):
     def setUp(self):
-        blockchain = Blockchain("Marc")
-        blockchain.blockchain = [genesis_block]
-        return super().tearDown()
+        return super().setUp()
 
     def tearDown(self) -> None:
         return super().tearDown()
