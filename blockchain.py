@@ -31,7 +31,7 @@ class Blockchain:
     def __init__(self, owner, init_chain: list=[], init_transactions:list=[], blockchain_location_path:str | None=None):
 
         self.owner = owner
-        self.blockchain = init_chain[]
+        self.blockchain = init_chain[:]
         self.open_transaction = init_transactions[:]
         self.participants = Member()
         self.participants.add(owner)
