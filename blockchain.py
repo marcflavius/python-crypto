@@ -129,7 +129,7 @@ class Blockchain:
             self.create_blockchain_file_store(blockchain_location_path)
         self.hydrate_blockchain(blockchain_location_path)
         if len(self.blockchain) == 0:
-            Log. log("Init blockchain")
+            Log.log("Init blockchain")
             blockchain.append(genesis_block)
 
     def hydrate_blockchain(self, blockchain_location_path="blockchain.txt"):
