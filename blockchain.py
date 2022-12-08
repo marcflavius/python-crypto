@@ -81,13 +81,13 @@ class Blockchain:
             Log.log("Block added!")
         else:
             # revert
-            self.revert_chain(self.blockchain, old_blockchain)
+            self.revert_chain(old_blockchain)
             Log.log("Invalid chain! at index {}".format(index))
 
-    def revert_chain(self, blockchain, old_blockchain):
-        blockchain.blockchain.clear()
+    def revert_chain(self, old_blockchain):
+        self.blockchain.clear()
         for block in old_blockchain:
-            blockchain.blockchain.append(block)
+            self.blockchain.append(block)
 
     def output_blockchain(self, given_blockchain):
         """Output the block chain"""
