@@ -28,10 +28,11 @@ MINING_TRANSACTION = 5
 
 
 class Blockchain:
-    def __init__(self, owner, blockchain_location_path=None):
+    def __init__(self, owner, init_chain: list=[], init_transactions:list=[], blockchain_location_path:str | None=None):
+
         self.owner = owner
-        self.blockchain = []
-        self.open_transaction = []
+        self.blockchain = init_chain[]
+        self.open_transaction = init_transactions[:]
         self.participants = Member()
         self.participants.add(owner)
         self.blockchain_location_path = (
