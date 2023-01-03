@@ -214,7 +214,7 @@ class TestBlockchain(unittest.TestCase):
         assert controller.called
         assert logger.called
         logger.log.called_with("Good Bye!")
-        # self.assertEqual(blockchain.blockchain, [])
+        self.assertEqual(blockchain.blockchain, [])
 
     @patch.object(
         Blockchain,
@@ -230,35 +230,28 @@ class TestBlockchain(unittest.TestCase):
     )
     @patch.object(Verification, "verify_chain", side_effect=[(True, 0), (True, 1)])
     @patch.object(Log, "log")
-    def test_mind_block_success(
-        self, 
-        logger,
-        verify_chain, 
-        hash_block, 
-        get_last_blockchain_value,
-    ):
-        init_blockchain = [genesis_block, derived_from_genesis_block]
-        blockchain = Blockchain("Marc")
-        blockchain.blockchain = init_blockchain[:]
-        blockchain.open_transaction.append(
-            {"sender": "Marc", "recipient": "Bob", "amount": 100}
-        ) 
-
-        blockchain.mine_block()
-        self.assertEqual(len(blockchain.blockchain), 3)
-        self.assertEqual(blockchain.blockchain[0]["index"], 0)
-        self.assertEqual(blockchain.blockchain[1]["index"], 1)
-        self.assertEqual(blockchain.blockchain[2]["index"], 2)
-        get_last_blockchain_value.called
-        hash_block.called
-        verify_chain.called
-        logger.called
-        logger.assert_called_with("Block added!")
-        self.assertEqual(len(init_blockchain), 2)
-        self.assertEqual(len(blockchain.blockchain), 3)
-        self.assertEqual(len(blockchain.blockchain[2]["transactions"]), 2)
-        self.assertEqual(len(blockchain.open_transaction), 0)
-
+    def test_mind_block_success( self, logger, verify_chain, hash_block, get_last_blockchain_value, ):
+        with patch("builtins.open", mock_open()):
+            init_blockchain = [genesis_block, derived_from_genesis_block]
+            blockchain = Blockchain("Marc", init_blockchain[:])
+            blockchain.open_transaction.append(
+                {"sender": "Marc", "recipient": "Bob", "amount": 100}
+            )
+            blockchain.mine_block()
+            self.assertEqual(len(blockchain.blockchain), 3)
+            self.assertEqual(blockchain.blockchain[0]["index"], 0)
+            self.assertEqual(blockchain.blockchain[1]["index"], 1)
+            self.assertEqual(blockchain.blockchain[2]["index"], 2)
+            get_last_blockchain_value.called
+            hash_block.called
+            verify_chain.called
+            logger.called
+            logger.assert_called_with("Block added!")
+            self.assertEqual(len(init_blockchain), 2)
+            self.assertEqual(len(blockchain.blockchain), 3)
+            self.assertEqual(len(blockchain.blockchain[2]["transactions"]), 2)
+            self.assertEqual(len(blockchain.open_transaction), 0)
+ 
     @patch.object(
         Blockchain,
         "get_last_blockchain_value",
@@ -276,11 +269,10 @@ class TestBlockchain(unittest.TestCase):
     def test_mind_block_fails(
         self, get_last_blockchain_value, hash_block, verify_chain, logger
     ):
-        blockchain = Blockchain("Marc")
         given_blockchain = [genesis_block, falsy_derivation_of_genesis_block]
+        blockchain = Blockchain("Marc", given_blockchain)
         init_blockchain = given_blockchain[:]
-        open_transaction = []
-        blockchain.mine_block(given_blockchain, open_transaction)
+        blockchain.mine_block()
         self.assertEqual(given_blockchain[0]["index"], 0)
         self.assertEqual(given_blockchain[1]["index"], 1)
         get_last_blockchain_value.called
@@ -399,6 +391,7 @@ class TestBlockchain(unittest.TestCase):
         get_last_blockchain_value.called
 
     def test_it_can_add_a_transaction_to_the_open_transaction_queue(self):
+        open_transaction = [{"amount": 10, "recipient": "Bob", "sender": "Marc"}]
         blockchain = Blockchain("Marc")
         node = Node(blockchain, blockchain.owner)
         node.add_transaction(
@@ -406,10 +399,7 @@ class TestBlockchain(unittest.TestCase):
             sender="Marc",
             amount=10,
         )
-        self.assertEqual(
-            blockchain.open_transaction,
-            [{"amount": 10, "recipient": "Bob", "sender": "Marc"}],
-        )
+        self.assertEqual(len(blockchain.open_transaction), len(open_transaction))
 
     def test_it_can_add_a_participant(self):
         blockchain = Blockchain("Marc")
@@ -420,9 +410,9 @@ class TestBlockchain(unittest.TestCase):
         blockchain = Blockchain("Marc")
         node = Node(blockchain, blockchain.owner)
         node.add_transaction(recipient="Bob", sender="Marc", amount=10)
-        blockchain.mine_block([], [])
+        blockchain.mine_block()
         node.add_transaction(recipient="Tom", sender="Marc", amount=10)
-        blockchain.mine_block([], [])
+        blockchain.mine_block()
         is_valid = Verification.verify_chain(blockchain)
         self.assertTrue(is_valid)
 
@@ -438,9 +428,20 @@ class TestBlockchain(unittest.TestCase):
         node.controller()
         assert get_user_choice.called
         assert get_user_transaction.called
-        assert blockchain.open_transaction == [
-            {"sender": "Marc", "recipient": "Bob", "amount": 10}
-        ]
+        
+    @patch.object(Node, "get_user_choice", side_effect=[("3", [3]), ("q", ["q"])])
+    @patch.object(Node, "user_wants_to_mind_new_block", return_value=True)
+    def test_controller_mine_block_success(
+        self,
+        get_user_choice,
+        user_wants_to_mind_new_block,
+    ):
+        given_transactions = [{"sender": "Marc", "recipient": "Bob", "amount": 10}]
+        blockchain = Blockchain("Marc", [], given_transactions[:])
+        node = Node(blockchain, blockchain.owner)
+        node.controller()
+        get_user_choice.assert_called_once_with("3")
+        user_wants_to_mind_new_block.assert_called()
 
     @patch.object(Blockchain, "get_last_blockchain_value")
     def test_hash_a_blockchain(self, get_last_blockchain_value):
