@@ -1,7 +1,7 @@
 import json
 import unittest
 from unittest.mock import patch, mock_open
-from block import Block
+from block import Block, PrimeBlock
 import blockchain
 from member import Member
 from node import Node
@@ -10,19 +10,19 @@ from transaction import Transaction
 from verification import Verification
 from blockchain import Blockchain
 
-genesis_block = {
+genesis_block: PrimeBlock = {
     "previous_hash": "GENESIS_BLOCK",
     "index": 0,
     "transactions": [],
     "salt": 22,
 }
-derived_from_genesis_block = {
+derived_from_genesis_block: PrimeBlock = {
     "previous_hash": "0cdfe6d341443fb03e149add1696d83da65e8ca9ed7a19e28cda0212c45dbf89",
     "index": 1,
     "transactions": [],
     "salt": 11,
 }
-falsy_derivation_of_genesis_block = {
+falsy_derivation_of_genesis_block: PrimeBlock = {
     "previous_hash": "0cdfe6d341443fb03e149add1696d83da65e8ca9ed7a19e28cda0212c45dbf89",
     "index": 1,
     "transactions": [],
@@ -119,7 +119,7 @@ class TestBlockchain(unittest.TestCase):
             # )
 
     def test_save_blockchian_success(self):
-        blockchain = Blockchain("Marc")
+        blockchain = Blockchain("Marc",)
         data = json.dumps(
             {
                 "blockchain": blockchain.blockchain,
@@ -128,9 +128,7 @@ class TestBlockchain(unittest.TestCase):
             indent=4,
         )
         with patch("builtins.open", mock_open()) as file_handle:
-            blockchain.save_blockchain(
-                blockchain.blockchain, blockchain.open_transaction
-            )
+            blockchain.save_blockchain()
             open.assert_called_with("blockchain.txt", encoding="utf-8", mode="w")
             file_handle.return_value.write.assert_called_with(data)
 
@@ -140,9 +138,7 @@ class TestBlockchain(unittest.TestCase):
         mockOpen = mock_open()
         mockOpen.side_effect = IOError
         with patch("builtins.open", mockOpen):
-            blockchain.save_blockchain(
-                blockchain.blockchain, blockchain.open_transaction
-            )
+            blockchain.save_blockchain()
         logger.assert_called_with("can't write to file blockchain.txt.")
 
     @patch("os.path.exists", return_value=False)
@@ -194,7 +190,7 @@ class TestBlockchain(unittest.TestCase):
         logger,
     ):
         blockchain = Blockchain("Marc")
-        blockchain.blockchain = [genesis_block]
+        blockchain.blockchain = [Block(genesis_block)]
         blockchain.load_blockchain("test_blockchain.txt")
         assert exists.called
         assert not create_blockchain_file_store.called
@@ -219,7 +215,7 @@ class TestBlockchain(unittest.TestCase):
     @patch.object(
         Blockchain,
         "get_last_blockchain_value",
-        side_effect=[derived_from_genesis_block],
+        side_effect=[Block(derived_from_genesis_block)],
     )
     @patch.object(
         Verification,
@@ -232,16 +228,16 @@ class TestBlockchain(unittest.TestCase):
     @patch.object(Log, "log")
     def test_mind_block_success( self, logger, verify_chain, hash_block, get_last_blockchain_value, ):
         with patch("builtins.open", mock_open()):
-            init_blockchain = [genesis_block, derived_from_genesis_block]
+            init_blockchain = [Block(genesis_block), Block(derived_from_genesis_block)]
             blockchain = Blockchain("Marc", init_blockchain[:])
             blockchain.open_transaction.append(
                 {"sender": "Marc", "recipient": "Bob", "amount": 100}
             )
             blockchain.mine_block()
             self.assertEqual(len(blockchain.blockchain), 3)
-            self.assertEqual(blockchain.blockchain[0]["index"], 0)
-            self.assertEqual(blockchain.blockchain[1]["index"], 1)
-            self.assertEqual(blockchain.blockchain[2]["index"], 2)
+            self.assertEqual(blockchain.blockchain[0].index, 0)
+            self.assertEqual(blockchain.blockchain[1].index, 1)
+            self.assertEqual(blockchain.blockchain[2].index, 2)
             get_last_blockchain_value.called
             hash_block.called
             verify_chain.called
@@ -249,13 +245,13 @@ class TestBlockchain(unittest.TestCase):
             logger.assert_called_with("Block added!")
             self.assertEqual(len(init_blockchain), 2)
             self.assertEqual(len(blockchain.blockchain), 3)
-            self.assertEqual(len(blockchain.blockchain[2]["transactions"]), 2)
+            self.assertEqual(len(blockchain.blockchain[2].transactions), 2)
             self.assertEqual(len(blockchain.open_transaction), 0)
  
     @patch.object(
         Blockchain,
         "get_last_blockchain_value",
-        side_effect=[derived_from_genesis_block],
+        side_effect=[Block(derived_from_genesis_block)],
     )
     @patch.object(
         Verification,
@@ -269,12 +265,12 @@ class TestBlockchain(unittest.TestCase):
     def test_mind_block_fails(
         self, get_last_blockchain_value, hash_block, verify_chain, logger
     ):
-        given_blockchain = [genesis_block, falsy_derivation_of_genesis_block]
+        given_blockchain = [Block(genesis_block), Block(falsy_derivation_of_genesis_block)]
         blockchain = Blockchain("Marc", given_blockchain)
         init_blockchain = given_blockchain[:]
         blockchain.mine_block()
-        self.assertEqual(given_blockchain[0]["index"], 0)
-        self.assertEqual(given_blockchain[1]["index"], 1)
+        self.assertEqual(given_blockchain[0].index, 0)
+        self.assertEqual(given_blockchain[1].index, 1)
         get_last_blockchain_value.called
         hash_block.called
         verify_chain.called
@@ -323,18 +319,29 @@ class TestBlockchain(unittest.TestCase):
     @patch.object(
         Blockchain,
         "get_last_blockchain_value",
-        return_value={
-            "previous_hash": "076f74c1e78bceb14a65775013948f24eaacc3ac1bc7e3e911fe4aa3ae198c7"
-        },
+        return_value=Block({
+                "transactions": [],
+                "salt": 0,
+                "previous_hash": "00",
+                "index": 1,
+                "previous_hash": "076f74c1e78bceb14a65775013948f24eaacc3ac1bc7e3e911fe4aa3ae198c7"
+        })
     )
     def test_valid_salt(self, get_last_blockchain_value):
         blockchain = Blockchain("Marc")
+        
         blockchain.open_transaction = [self.generate_transaction()]
-        previous_hash = blockchain.get_last_blockchain_value()["previous_hash"]
+        previous_hash = blockchain.get_last_blockchain_value().previous_hash
         salt = Verification.find_block_salt(blockchain.open_transaction, previous_hash)
         valid = Verification.valid_salt(blockchain.open_transaction, previous_hash, 19)
         get_last_blockchain_value.called
         self.assertEqual(valid, True)
+
+    def test_get_last_blockchain_value(self):
+        init_blockchain = [Block(genesis_block), Block(derived_from_genesis_block)]
+        blockchain = Blockchain("Marc", init_blockchain)
+        last_block = blockchain.get_last_blockchain_value()
+        self.assertIsInstance(last_block, Block)
 
     def generate_transaction(self):
         return {"sender": "Marc", "recipient": "Bob", "amount": 100}
@@ -361,26 +368,30 @@ class TestBlockchain(unittest.TestCase):
 
     def get_blockchain_stub(self):
         return [
-            genesis_block,
-            {
+            Block(genesis_block),
+            Block({
+                "salt": 0,
                 "previous_hash": "00",
                 "index": 1,
                 "transactions": [
                     {"sender": "Marc", "recipient": "Bob", "amount": 100},
                     {"sender": "Marc", "recipient": "Bob", "amount": 100},
                 ],
-            },
+            }),
         ]
 
     @patch.object(
         Blockchain,
         "get_last_blockchain_value",
-        return_value={
+        return_value=Block({
+            "index": 0,
+            "previous_hash": "stub",
+            "salt": 0,
             "transactions": [
                 {"sender": "Marc", "recipient": "Bob", "amount": 100},
                 {"sender": "Marc", "recipient": "Bob", "amount": 100},
             ],
-        },
+        }),
     )
     def test_get_user_balance(self, get_last_blockchain_value):
         blockchain = Blockchain("Marc")

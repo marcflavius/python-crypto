@@ -3,8 +3,10 @@
 from functools import reduce
 import json
 import os.path
+from block import Block, PrimeBlock
 from log import Log
 from member import Member
+from utils.printable import Printable
 from verification import Verification
 
 # TODO: Add OrderedDict logic to prevent block validation failure due to dict reordering
@@ -17,21 +19,22 @@ from verification import Verification
 # node
 # TODO: Add OOP create a printable helper class to output class __repr__
 
-genesis_block = {
+genesis_block: PrimeBlock = {
     "previous_hash": "GENESIS_BLOCK",
     "index": 0,
     "transactions": [],
+    "salt": 0,
 }
 blockchain = []
 open_transaction = []
 MINING_TRANSACTION = 5
 
 
-class Blockchain:
-    def __init__(self, owner, init_chain: list=[], init_transactions:list=[], blockchain_location_path:str | None=None):
+class Blockchain(Printable):
+    def __init__(self, owner, init_chain: list[Block]=[], init_transactions:list=[], blockchain_location_path:str | None=None):
 
         self.owner = owner
-        self.blockchain = init_chain[:]
+        self.blockchain: list[Block] = init_chain[:]
         self.open_transaction = init_transactions[:]
         self.participants = Member()
         self.participants.add(owner)
@@ -45,18 +48,15 @@ class Blockchain:
         """Wipe the blockchain"""
         self.blockchain = []
 
-    def get_last_blockchain_value(self, givin_blockchain=None):
+    def get_last_blockchain_value(self):
         """Get the last element in the blockchain"""
         global genesis_block
-        used_blockchain = (
-            self.blockchain if givin_blockchain == None else givin_blockchain
-        )
-        return used_blockchain[-1] if len(used_blockchain) > 0 else genesis_block
+        return self.blockchain[-1] if len(self.blockchain) > 0 else Block(genesis_block)
 
     def mine_block(self):
         """Add all open transaction to a block and wipe
         the open transaction array"""
-        previous_hash = self.get_last_blockchain_value(self.blockchain)["previous_hash"]
+        previous_hash = self.get_last_blockchain_value().previous_hash
         old_blockchain = self.blockchain[:]
         reward_transaction = {
             "sender": "MINING",
@@ -69,17 +69,17 @@ class Blockchain:
         current_hash = Verification.hash_block(
             self.open_transaction, previous_hash, salt
         )
-        new_block = {
+        new_block = Block({
             "previous_hash": current_hash,
             "index": len(self.blockchain),
             "transactions": self.open_transaction[:],
             "salt": salt,
-        }
+        })
         self.blockchain.append(new_block)
 
         valid, index = Verification.verify_chain(self.blockchain)
         if valid:
-            self.save_blockchain(self.blockchain, [])
+            self.save_blockchain()
             self.open_transaction.clear()
             Log.log("Block added!")
         else:
@@ -107,7 +107,7 @@ class Blockchain:
 
     def get_user_balance(self, user_id):
         last_block = self.get_last_blockchain_value()
-        transactions = last_block["transactions"]
+        transactions = last_block.transactions
 
         def balance(total, transaction):
             amount = transaction["amount"]
@@ -136,6 +136,7 @@ class Blockchain:
             blockchain.append(genesis_block)
 
     def hydrate_blockchain(self, blockchain_location_path="blockchain.txt"):
+
         try:
             with open(self.blockchain_location_path, encoding="utf-8", mode="r") as f:
                 data = json.load(f)
@@ -153,21 +154,28 @@ class Blockchain:
                     blockchain_location_path
                 )
             )
-
+        
     def create_blockchain_file_store(self, blockchain_location_path):
         try:
             with open(blockchain_location_path, encoding="utf-8", mode="w"):
-                self.save_blockchain(self.blockchain, self.open_transaction)
+                self.save_blockchain()
         except IOError:
             Log.log("Can't create the file {}".format(blockchain_location_path))
 
-    def save_blockchain(self, blockchain, open_transaction):
+    def blockchainToList(self):
+        blockchain_list = []
+        for block in self.blockchain:
+            blockchain_list.append(block.to_prime())
+        return blockchain_list 
+        
+    def save_blockchain(self):
+
         try:
             with open(self.blockchain_location_path, encoding="utf-8", mode="w") as f:
                 data = json.dumps(
                     {
-                        "blockchain": blockchain,
-                        "open_transaction": open_transaction,
+                        "blockchain": self.blockchainToList(),
+                        "open_transaction": self.open_transaction,
                     },
                     indent=4,
                 )

@@ -1,7 +1,8 @@
 from time import time
+from utils.printable import Printable
 
 
-class Transaction:
+class Transaction(Printable):
     def __init__(self, transaction):
         self.sender = transaction["sender"]
         self.recipient = transaction["recipient"]

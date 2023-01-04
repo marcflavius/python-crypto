@@ -2,8 +2,9 @@ import re
 
 from log import Log
 from blockchain import Blockchain
+from utils.printable import Printable
 
-class Node():
+class Node(Printable):
     def __init__(self, blockchain, owner):
             self.blockchain: Blockchain = blockchain
             self.owner: str = owner
@@ -128,7 +129,7 @@ class Node():
         self.blockchain.open_transaction.append(transaction)
         self.blockchain.participants.add(sender)
         self.blockchain.participants.add(recipient)
-        self.blockchain.save_blockchain(self.blockchain.blockchain, self.blockchain.open_transaction)
+        self.blockchain.save_blockchain()
 
 if __name__ == "__main__":
     blockchain = Blockchain('Marc')
