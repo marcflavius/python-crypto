@@ -1,0 +1,935 @@
+[
+    {
+        "label": "Block",
+        "importPath": "block",
+        "description": "block",
+        "isExtraImport": true,
+        "detail": "block",
+        "documentation": {}
+    },
+    {
+        "label": "PrimeBlock",
+        "importPath": "block",
+        "description": "block",
+        "isExtraImport": true,
+        "detail": "block",
+        "documentation": {}
+    },
+    {
+        "label": "Block",
+        "importPath": "block",
+        "description": "block",
+        "isExtraImport": true,
+        "detail": "block",
+        "documentation": {}
+    },
+    {
+        "label": "Block",
+        "importPath": "block",
+        "description": "block",
+        "isExtraImport": true,
+        "detail": "block",
+        "documentation": {}
+    },
+    {
+        "label": "PrimeBlock",
+        "importPath": "block",
+        "description": "block",
+        "isExtraImport": true,
+        "detail": "block",
+        "documentation": {}
+    },
+    {
+        "label": "Block",
+        "importPath": "block",
+        "description": "block",
+        "isExtraImport": true,
+        "detail": "block",
+        "documentation": {}
+    },
+    {
+        "label": "PrimeBlock",
+        "importPath": "block",
+        "description": "block",
+        "isExtraImport": true,
+        "detail": "block",
+        "documentation": {}
+    },
+    {
+        "label": "Block",
+        "importPath": "block",
+        "description": "block",
+        "isExtraImport": true,
+        "detail": "block",
+        "documentation": {}
+    },
+    {
+        "label": "PrimeBlock",
+        "importPath": "block",
+        "description": "block",
+        "isExtraImport": true,
+        "detail": "block",
+        "documentation": {}
+    },
+    {
+        "label": "PrimeTransaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "Transaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "Transaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "Transaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "Transaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "PrimeTransaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "Transaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "PrimeTransaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "Transaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "PrimeTransaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "unittest",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "unittest",
+        "description": "unittest",
+        "detail": "unittest",
+        "documentation": {}
+    },
+    {
+        "label": "genesis_block",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "generate_single_transaction",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "get_blockchain_stub",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "falsy_derivation_of_genesis_block",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "derived_from_genesis_block",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "genesis_block",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "generate_single_transaction",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "generate_single_transaction",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "generate_single_transaction",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "get_open_transaction_stub",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "get_open_transaction_stub",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "derived_from_genesis_block",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "genesis_block",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "isfloat",
+        "importPath": "utils.helpers",
+        "description": "utils.helpers",
+        "isExtraImport": true,
+        "detail": "utils.helpers",
+        "documentation": {}
+    },
+    {
+        "label": "isfloat",
+        "importPath": "utils.helpers",
+        "description": "utils.helpers",
+        "isExtraImport": true,
+        "detail": "utils.helpers",
+        "documentation": {}
+    },
+    {
+        "label": "isfloat",
+        "importPath": "utils.helpers",
+        "description": "utils.helpers",
+        "isExtraImport": true,
+        "detail": "utils.helpers",
+        "documentation": {}
+    },
+    {
+        "label": "isfloat",
+        "importPath": "utils.helpers",
+        "description": "utils.helpers",
+        "isExtraImport": true,
+        "detail": "utils.helpers",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "MagicMock",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "patch",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "mock_open",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "MagicMock",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "patch",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "mock_open",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "MagicMock",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "patch",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "mock_open",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "patch",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "mock_open",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "node",
+        "description": "node",
+        "isExtraImport": true,
+        "detail": "node",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "node",
+        "description": "node",
+        "isExtraImport": true,
+        "detail": "node",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "node",
+        "description": "node",
+        "isExtraImport": true,
+        "detail": "node",
+        "documentation": {}
+    },
+    {
+        "label": "Log",
+        "importPath": "log",
+        "description": "log",
+        "isExtraImport": true,
+        "detail": "log",
+        "documentation": {}
+    },
+    {
+        "label": "Log",
+        "importPath": "log",
+        "description": "log",
+        "isExtraImport": true,
+        "detail": "log",
+        "documentation": {}
+    },
+    {
+        "label": "Log",
+        "importPath": "log",
+        "description": "log",
+        "isExtraImport": true,
+        "detail": "log",
+        "documentation": {}
+    },
+    {
+        "label": "Log",
+        "importPath": "log",
+        "description": "log",
+        "isExtraImport": true,
+        "detail": "log",
+        "documentation": {}
+    },
+    {
+        "label": "Log",
+        "importPath": "log",
+        "description": "log",
+        "isExtraImport": true,
+        "detail": "log",
+        "documentation": {}
+    },
+    {
+        "label": "Verification",
+        "importPath": "verification",
+        "description": "verification",
+        "isExtraImport": true,
+        "detail": "verification",
+        "documentation": {}
+    },
+    {
+        "label": "Verification",
+        "importPath": "verification",
+        "description": "verification",
+        "isExtraImport": true,
+        "detail": "verification",
+        "documentation": {}
+    },
+    {
+        "label": "Verification",
+        "importPath": "verification",
+        "description": "verification",
+        "isExtraImport": true,
+        "detail": "verification",
+        "documentation": {}
+    },
+    {
+        "label": "blockchain",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "blockchain",
+        "description": "blockchain",
+        "detail": "blockchain",
+        "documentation": {}
+    },
+    {
+        "label": "Blockchain",
+        "importPath": "blockchain",
+        "description": "blockchain",
+        "isExtraImport": true,
+        "detail": "blockchain",
+        "documentation": {}
+    },
+    {
+        "label": "Blockchain",
+        "importPath": "blockchain",
+        "description": "blockchain",
+        "isExtraImport": true,
+        "detail": "blockchain",
+        "documentation": {}
+    },
+    {
+        "label": "Blockchain",
+        "importPath": "blockchain",
+        "description": "blockchain",
+        "isExtraImport": true,
+        "detail": "blockchain",
+        "documentation": {}
+    },
+    {
+        "label": "Blockchain",
+        "importPath": "blockchain",
+        "description": "blockchain",
+        "isExtraImport": true,
+        "detail": "blockchain",
+        "documentation": {}
+    },
+    {
+        "label": "Member",
+        "importPath": "member",
+        "description": "member",
+        "isExtraImport": true,
+        "detail": "member",
+        "documentation": {}
+    },
+    {
+        "label": "Member",
+        "importPath": "member",
+        "description": "member",
+        "isExtraImport": true,
+        "detail": "member",
+        "documentation": {}
+    },
+    {
+        "label": "Member",
+        "importPath": "member",
+        "description": "member",
+        "isExtraImport": true,
+        "detail": "member",
+        "documentation": {}
+    },
+    {
+        "label": "Member",
+        "importPath": "member",
+        "description": "member",
+        "isExtraImport": true,
+        "detail": "member",
+        "documentation": {}
+    },
+    {
+        "label": "abc",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "abc",
+        "description": "abc",
+        "detail": "abc",
+        "documentation": {}
+    },
+    {
+        "label": "Callable",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "NamedTuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "TypedDict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Type",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "TypedDict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "Primeable",
+        "importPath": "utils.primeable",
+        "description": "utils.primeable",
+        "isExtraImport": true,
+        "detail": "utils.primeable",
+        "documentation": {}
+    },
+    {
+        "label": "Primeable",
+        "importPath": "utils.primeable",
+        "description": "utils.primeable",
+        "isExtraImport": true,
+        "detail": "utils.primeable",
+        "documentation": {}
+    },
+    {
+        "label": "Primeable",
+        "importPath": "utils.primeable",
+        "description": "utils.primeable",
+        "isExtraImport": true,
+        "detail": "utils.primeable",
+        "documentation": {}
+    },
+    {
+        "label": "Primeable",
+        "importPath": "utils.primeable",
+        "description": "utils.primeable",
+        "isExtraImport": true,
+        "detail": "utils.primeable",
+        "documentation": {}
+    },
+    {
+        "label": "Printable",
+        "importPath": "utils.printable",
+        "description": "utils.printable",
+        "isExtraImport": true,
+        "detail": "utils.printable",
+        "documentation": {}
+    },
+    {
+        "label": "Printable",
+        "importPath": "utils.printable",
+        "description": "utils.printable",
+        "isExtraImport": true,
+        "detail": "utils.printable",
+        "documentation": {}
+    },
+    {
+        "label": "Printable",
+        "importPath": "utils.printable",
+        "description": "utils.printable",
+        "isExtraImport": true,
+        "detail": "utils.printable",
+        "documentation": {}
+    },
+    {
+        "label": "Printable",
+        "importPath": "utils.printable",
+        "description": "utils.printable",
+        "isExtraImport": true,
+        "detail": "utils.printable",
+        "documentation": {}
+    },
+    {
+        "label": "Printable",
+        "importPath": "utils.printable",
+        "description": "utils.printable",
+        "isExtraImport": true,
+        "detail": "utils.printable",
+        "documentation": {}
+    },
+    {
+        "label": "reduce",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "os.path",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os.path",
+        "description": "os.path",
+        "detail": "os.path",
+        "documentation": {}
+    },
+    {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "hashlib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "hashlib",
+        "description": "hashlib",
+        "detail": "hashlib",
+        "documentation": {}
+    },
+    {
+        "label": "generate_single_transaction",
+        "kind": 2,
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "peekOfCode": "def generate_single_transaction(\n    sender=\"Marc\", recipient=\"Bob\", amount=10\n) -> PrimeTransaction:\n    return {\"sender\": sender, \"recipient\": recipient, \"amount\": amount}\ndef get_open_transaction_stub():\n    return [{\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100}]\ndef get_blockchain_stub():\n    return [\n        Block(genesis_block),\n        Block(",
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "get_open_transaction_stub",
+        "kind": 2,
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "peekOfCode": "def get_open_transaction_stub():\n    return [{\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100}]\ndef get_blockchain_stub():\n    return [\n        Block(genesis_block),\n        Block(\n            {\n                \"salt\": 0,\n                \"previous_hash\": \"00\",\n                \"index\": 1,",
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "get_blockchain_stub",
+        "kind": 2,
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "peekOfCode": "def get_blockchain_stub():\n    return [\n        Block(genesis_block),\n        Block(\n            {\n                \"salt\": 0,\n                \"previous_hash\": \"00\",\n                \"index\": 1,\n                \"transactions\": [\n                    {\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100},",
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "TestBlock",
+        "kind": 6,
+        "importPath": "tests.test_block",
+        "description": "tests.test_block",
+        "peekOfCode": "class TestBlock(unittest.TestCase):\n    def test_create_block_instance(self):\n        instance = Block(genesis_block)\n        block = instance.__dict__\n        assert block[\"index\"] == genesis_block[\"index\"]\n        assert block[\"previous_hash\"] == genesis_block[\"previous_hash\"]\n        assert block[\"transactions\"] == genesis_block[\"transactions\"]\n        assert block[\"salt\"] == genesis_block[\"salt\"]\n        assert isfloat(block[\"created_at\"])",
+        "detail": "tests.test_block",
+        "documentation": {}
+    },
+    {
+        "label": "TestBlockchain",
+        "kind": 6,
+        "importPath": "tests.test_blockchain",
+        "description": "tests.test_blockchain",
+        "peekOfCode": "class TestBlockchain(unittest.TestCase):\n    def setUp(self):\n        return super().setUp()\n    def tearDown(self) -> None:\n        return super().tearDown()\n    # (start)\n    def test_hydrate_blockchain_success(self):\n        blockchain = Blockchain(\"Marc\")\n        open_transaction = [generate_single_transaction()]\n        given_blockchain = [genesis_block, derived_from_genesis_block]",
+        "detail": "tests.test_blockchain",
+        "documentation": {}
+    },
+    {
+        "label": "TestMember",
+        "kind": 6,
+        "importPath": "tests.test_member",
+        "description": "tests.test_member",
+        "peekOfCode": "class TestMember(unittest.TestCase):\n    def test_create_member_instance(self):\n        instance = Member()\n        member_list_type = type(instance.members)\n        member_list_size = len(instance.members)\n        assert member_list_type.__name__ == \"set\"\n        assert member_list_size == 0\n    def test_add_a_member_to_members_instance_success(self):\n        instance = Member()\n        instance.add(\"Marc\")",
+        "detail": "tests.test_member",
+        "documentation": {}
+    },
+    {
+        "label": "TestNode",
+        "kind": 6,
+        "importPath": "tests.test_node",
+        "description": "tests.test_node",
+        "peekOfCode": "class TestNode(unittest.TestCase):\n    @patch.object(Blockchain, \"load_blockchain\")\n    @patch.object(Node, \"controller\")\n    @patch.object(Log, \"log\")\n    def test_main(self, load_blockchain, controller, logger):\n        blockchain = Blockchain(\"Marc\")\n        node = Node(blockchain, blockchain.owner)\n        node.main()\n        blockchain.blockchain = []\n        blockchain.open_transaction = [Transaction(generate_single_transaction())]",
+        "detail": "tests.test_node",
+        "documentation": {}
+    },
+    {
+        "label": "TestTransaction",
+        "kind": 6,
+        "importPath": "tests.test_transaction",
+        "description": "tests.test_transaction",
+        "peekOfCode": "class TestTransaction(unittest.TestCase):\n    def test_create_transaction_instance(self):\n        givenPrimeTransaction = generate_single_transaction(\n            sender=\"Marc\", recipient=\"Bob\", amount=10\n        )\n        instance = Transaction(givenPrimeTransaction)\n        transactionOfInstance = instance.__dict__\n        assert transactionOfInstance[\"sender\"] == \"Marc\"\n        assert transactionOfInstance[\"recipient\"] == \"Bob\"\n        assert transactionOfInstance[\"amount\"] == 10",
+        "detail": "tests.test_transaction",
+        "documentation": {}
+    },
+    {
+        "label": "TestVerification",
+        "kind": 6,
+        "importPath": "tests.test_verification",
+        "description": "tests.test_verification",
+        "peekOfCode": "class TestVerification(unittest.TestCase):\n    @patch.object(Verification, \"find_block_salt\", return_value=22)\n    def test_verify_the_chain_with_one_block(self, find_block_salt):\n        blockchain.blockchain = [genesis_block]\n        valid = Verification.verify_chain(blockchain.blockchain)\n        self.assertEqual(valid, (True, 0))\n        find_block_salt.called\n    def test_verify_the_chain_with_multi_block_fail(self):\n        blockchain.blockchain = [genesis_block, genesis_block]\n        valid = Verification.verify_chain(blockchain.blockchain)",
+        "detail": "tests.test_verification",
+        "documentation": {}
+    },
+    {
+        "label": "isfloat",
+        "kind": 2,
+        "importPath": "utils.helpers",
+        "description": "utils.helpers",
+        "peekOfCode": "def isfloat(num):\n    try:\n        float(num)\n        return True\n    except ValueError:\n        return False",
+        "detail": "utils.helpers",
+        "documentation": {}
+    },
+    {
+        "label": "Primeable",
+        "kind": 6,
+        "importPath": "utils.primeable",
+        "description": "utils.primeable",
+        "peekOfCode": "class Primeable():\n    def to_prime(self):\n        return self.__dict__",
+        "detail": "utils.primeable",
+        "documentation": {}
+    },
+    {
+        "label": "Printable",
+        "kind": 6,
+        "importPath": "utils.printable",
+        "description": "utils.printable",
+        "peekOfCode": "class Printable():\n    def __str__(self) -> str:\n        return self.__dict__.__str__()",
+        "detail": "utils.printable",
+        "documentation": {}
+    },
+    {
+        "label": "Block",
+        "kind": 6,
+        "importPath": "block",
+        "description": "block",
+        "peekOfCode": "class Block(Printable, Primeable):\n    def __init__(self, block: PrimeBlock):\n        self.index = block[\"index\"]\n        self.previous_hash = block[\"previous_hash\"]\n        self.transactions = block[\"transactions\"]\n        self.salt = block[\"salt\"]\n        if hasattr(block, 'created_at'):\n            self.created_at = block[\"created_at\"] # type: ignore\n            return \n        self.created_at = time()",
+        "detail": "block",
+        "documentation": {}
+    },
+    {
+        "label": "PrimeBlock",
+        "kind": 5,
+        "importPath": "block",
+        "description": "block",
+        "peekOfCode": "PrimeBlock = TypedDict('PrimeBlock', {'index': int, 'previous_hash': str, 'transactions': list, 'salt': int})\nclass Block(Printable, Primeable):\n    def __init__(self, block: PrimeBlock):\n        self.index = block[\"index\"]\n        self.previous_hash = block[\"previous_hash\"]\n        self.transactions = block[\"transactions\"]\n        self.salt = block[\"salt\"]\n        if hasattr(block, 'created_at'):\n            self.created_at = block[\"created_at\"] # type: ignore\n            return ",
+        "detail": "block",
+        "documentation": {}
+    },
+    {
+        "label": "Blockchain",
+        "kind": 6,
+        "importPath": "blockchain",
+        "description": "blockchain",
+        "peekOfCode": "class Blockchain(Printable):\n    def __init__(\n        self,\n        owner: str,\n        init_chain: list[Block] = [],\n        init_transactions: list[Transaction] = [],\n        blockchain_location_path: str | None = None,\n    ):\n        self.owner = owner\n        self.blockchain: list[Block] = init_chain[:]",
+        "detail": "blockchain",
+        "documentation": {}
+    },
+    {
+        "label": "blockchain",
+        "kind": 5,
+        "importPath": "blockchain",
+        "description": "blockchain",
+        "peekOfCode": "blockchain = []\nopen_transaction: list[Transaction] = []\nMINING_TRANSACTION: int = 5\nclass Blockchain(Printable):\n    def __init__(\n        self,\n        owner: str,\n        init_chain: list[Block] = [],\n        init_transactions: list[Transaction] = [],\n        blockchain_location_path: str | None = None,",
+        "detail": "blockchain",
+        "documentation": {}
+    },
+    {
+        "label": "Log",
+        "kind": 6,
+        "importPath": "log",
+        "description": "log",
+        "peekOfCode": "class Log():\n    @staticmethod\n    def log(msg):\n        print(msg)",
+        "detail": "log",
+        "documentation": {}
+    },
+    {
+        "label": "Member",
+        "kind": 6,
+        "importPath": "member",
+        "description": "member",
+        "peekOfCode": "class Member(Printable, Primeable):\n    def __init__(self, id=None):\n        self.members = set([])\n        if id is not None:\n            self.members.add(id)\n    def add(self, id):\n        self.members.add(id)\n    def all(self):\n        return self.members\n    def __repr__(self):",
+        "detail": "member",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "kind": 6,
+        "importPath": "node",
+        "description": "node",
+        "peekOfCode": "class Node(Printable):\n    def __init__(self, blockchain, owner):\n        self.blockchain: Blockchain = blockchain\n        self.owner: str = owner\n    \"\"\" User interface \"\"\"\n    def controller(self):\n        \"\"\"Groupe transaction handler\"\"\"\n        while True:\n            user_operation_help = \"\"\"\n                Please choose",
+        "detail": "node",
+        "documentation": {}
+    },
+    {
+        "label": "Transaction",
+        "kind": 6,
+        "importPath": "transaction",
+        "description": "transaction",
+        "peekOfCode": "class Transaction(Printable, Primeable):\n    def __init__(self, transaction: PrimeTransaction):\n        self.sender: str = transaction[\"sender\"]\n        self.recipient: str = transaction[\"recipient\"]\n        self.amount: float = transaction[\"amount\"]\n        if hasattr(transaction, \"created_at\"):\n            self.created_at = transaction[\"created_at\"]  # type: ignore\n            return\n        self.created_at: float = time()\n    def __repr__(self):",
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "PrimeTransaction",
+        "kind": 5,
+        "importPath": "transaction",
+        "description": "transaction",
+        "peekOfCode": "PrimeTransaction = TypedDict(\n    \"PrimeTransaction\",\n    {\n        \"sender\": str,\n        \"recipient\": str,\n        \"amount\": float,\n    },\n)\nclass Transaction(Printable, Primeable):\n    def __init__(self, transaction: PrimeTransaction):",
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "Verification",
+        "kind": 6,
+        "importPath": "verification",
+        "description": "verification",
+        "peekOfCode": "class Verification:\n    @staticmethod\n    def find_block_salt(transactions, previous_hash):\n        \"\"\"_summary_\n        Args:\n            transactions (list): open transaction\n            previous_hash (str): previous hash stored on last block in the chain\n        Returns:\n            _type_: int\n        \"\"\"",
+        "detail": "verification",
+        "documentation": {}
+    }
+]

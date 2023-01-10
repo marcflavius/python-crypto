@@ -1,10 +1,11 @@
 from time import time
-from typing import Optional, TypedDict
+from typing import TypedDict
+from utils.primeable import Primeable
 from utils.printable import Printable
 
 PrimeBlock = TypedDict('PrimeBlock', {'index': int, 'previous_hash': str, 'transactions': list, 'salt': int})
 
-class Block(Printable):
+class Block(Printable, Primeable):
     def __init__(self, block: PrimeBlock):
         self.index = block["index"]
         self.previous_hash = block["previous_hash"]
@@ -15,7 +16,5 @@ class Block(Printable):
             return 
         self.created_at = time()
     def __repr__(self):
-        return self.__dict__
-    def to_prime(self):
         return self.__dict__
 

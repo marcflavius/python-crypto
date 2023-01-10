@@ -19,32 +19,34 @@ class Verification:
             salt = salt + 1
             valid = Verification.valid_salt(transactions, previous_hash, salt)
         return salt
+
     @staticmethod
-    
     def valid_salt(open_transaction, previous_hash, salt):
-        guess = Verification.stringify_decoded_hash(open_transaction, previous_hash, salt)
+        guess = Verification.stringify_decoded_hash(
+            open_transaction, previous_hash, salt
+        )
         guess_hash = hash.sha256(guess).hexdigest()
         return guess_hash[0:1] == "0"
+
     @staticmethod
-    
     def stringify_decoded_hash(open_transaction, previous_hash, salt):
         return (str(open_transaction) + str(previous_hash) + str(salt)).encode()
+
     @staticmethod
-    
     def hash_block(open_transaction, previous_hash, salt):
         return hash.sha256(
             Verification.stringify_decoded_hash(open_transaction, previous_hash, salt)
         ).hexdigest()
+
     @staticmethod
-    
     def _is_first_block(block_index):
         return block_index == 0
+
     @staticmethod
-    
     def _blockchain_has_zero_or_one_block(blockchain):
         return len(blockchain) <= 1
+
     @staticmethod
-    
     def verify_chain(blockchain):
         """Verify the blockchain integrity"""
         block_index = -1

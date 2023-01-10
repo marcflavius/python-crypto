@@ -2,14 +2,17 @@ import re
 
 from log import Log
 from blockchain import Blockchain
+from transaction import Transaction, PrimeTransaction
 from utils.printable import Printable
+
 
 class Node(Printable):
     def __init__(self, blockchain, owner):
-            self.blockchain: Blockchain = blockchain
-            self.owner: str = owner
+        self.blockchain: Blockchain = blockchain
+        self.owner: str = owner
 
     """ User interface """
+
     def controller(self):
         """Groupe transaction handler"""
         while True:
@@ -36,7 +39,9 @@ class Node(Printable):
             elif self.user_wants_to_mind_new_block(user_choice):
                 self.blockchain.mine_block()
             elif self.user_wants_to_output_open_transaction(user_choice):
-                self.blockchain.output_open_transactions(self.blockchain.open_transaction)
+                self.blockchain.output_open_transactions(
+                    self.blockchain.open_transaction
+                )
             elif self.user_wants_to_output_participants(user_choice):
                 self.blockchain.output_participant()
             elif self.user_wants_to_output_balance(user_choice):
@@ -47,11 +52,13 @@ class Node(Printable):
             else:
                 # choice quit
                 break
+
     @staticmethod
     def get_user_input(msg, append="\n"):
         """Get a user input"""
         output = input(msg + append)
         return output
+
     @staticmethod
     def get_user_transaction():
         """Get user input transaction"""
@@ -79,7 +86,7 @@ class Node(Printable):
             user_choice,
             choice_list,
         )
-    
+
     @staticmethod
     def user_wants_to_quit(user_choice):
         return user_choice == "q"
@@ -121,17 +128,18 @@ class Node(Printable):
         recipient: the recipient of the coins.
         amount: the given transaction amount
         """
-        transaction = {
+        transaction: PrimeTransaction = {
             "sender": sender,
             "recipient": recipient,
             "amount": amount,
         }
-        self.blockchain.open_transaction.append(transaction)
+        self.blockchain.open_transaction.append(Transaction(transaction))
         self.blockchain.participants.add(sender)
         self.blockchain.participants.add(recipient)
         self.blockchain.save_blockchain()
 
+
 if __name__ == "__main__":
-    blockchain = Blockchain('Marc')
+    blockchain = Blockchain("Marc")
     node = Node(blockchain, blockchain.owner)
     node.main()
