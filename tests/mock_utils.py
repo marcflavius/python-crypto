@@ -1,5 +1,5 @@
 from block import Block, PrimeBlock
-from transaction import PrimeTransaction
+from transaction import PrimeTransaction, Transaction
 
 genesis_block: PrimeBlock = {
     "previous_hash": "GENESIS_BLOCK",
@@ -19,6 +19,14 @@ falsy_derivation_of_genesis_block: PrimeBlock = {
     "transactions": [],
     "salt": 22,
 }
+none_derived_block_with_transaction: PrimeBlock = {
+    "previous_hash": "GENESIS_BLOCK",
+    "index": 0,
+    "transactions": [
+        Transaction({"sender": "Marc", "recipient": "Bob", "amount": 100})
+    ],
+    "salt": 22,
+}
 
 
 def generate_single_transaction(
@@ -27,8 +35,13 @@ def generate_single_transaction(
     return {"sender": sender, "recipient": recipient, "amount": amount}
 
 
-def get_open_transaction_stub():
+def get_prime_open_transaction_stub() -> list[PrimeTransaction]:
     return [{"sender": "Marc", "recipient": "Bob", "amount": 100}]
+
+
+def get_open_transaction_stub():
+    return [Transaction({"sender": "Marc", "recipient": "Bob", "amount": 100})]
+
 
 def get_blockchain_stub():
     return [
@@ -44,4 +57,19 @@ def get_blockchain_stub():
                 ],
             }
         ),
+    ]
+
+
+def get_prime_blockchain_stub():
+    return [
+        genesis_block,
+        {
+            "salt": 0,
+            "previous_hash": "00",
+            "index": 1,
+            "transactions": [
+                {"sender": "Marc", "recipient": "Bob", "amount": 100},
+                {"sender": "Marc", "recipient": "Bob", "amount": 100},
+            ],
+        },
     ]

@@ -1,18 +1,19 @@
 import json
 import unittest
 from unittest.mock import MagicMock, patch, mock_open
-from block import Block, PrimeBlock
+from block import Block
 from node import Node
 from log import Log
 from transaction import Transaction
 from verification import Verification
 from blockchain import Blockchain
 from tests.mock_utils import (
-    generate_single_transaction,
-    get_blockchain_stub,
-    falsy_derivation_of_genesis_block,
     derived_from_genesis_block,
+    falsy_derivation_of_genesis_block,
+    generate_single_transaction,
     genesis_block,
+    get_blockchain_stub,
+    none_derived_block_with_transaction,
 )
 from utils.helpers import isfloat
 
@@ -25,6 +26,27 @@ class TestBlockchain(unittest.TestCase):
         return super().tearDown()
 
     # (start)
+
+    def test_map_to_prime(self):
+        open_transaction: list[Transaction] = [
+            Transaction(generate_single_transaction())
+        ]
+        given_blockchain: list[Block] = [Block(none_derived_block_with_transaction)]
+        blockchain = Blockchain("Marc", given_blockchain, open_transaction)
+        block_prime_list = blockchain.map_to_prime(Block)
+        block_prime_list[0].pop("created_at")
+        block_prime_list[0]["transactions"][0].pop("created_at")
+        # block_prime_list.("created_at")
+        assert block_prime_list == [
+            {
+                "previous_hash": "GENESIS_BLOCK",
+                "index": 0,
+                "transactions": [
+                    {"sender": "Marc", "recipient": "Bob", "amount": 100}
+                ],
+                "salt": 22,
+            }
+        ]
 
     def test_hydrate_blockchain_success(self):
         blockchain = Blockchain("Marc")
@@ -73,8 +95,8 @@ class TestBlockchain(unittest.TestCase):
         )
         data = json.dumps(
             {
-                "blockchain": blockchain.get_prime(Block),
-                "open_transaction": blockchain.get_prime(Transaction),
+                "blockchain": blockchain.map_to_prime(Block),
+                "open_transaction": blockchain.map_to_prime(Transaction),
             },
             indent=4,
         )

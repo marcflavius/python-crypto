@@ -1,12 +1,10 @@
 import unittest
-from unittest.mock import MagicMock, patch, mock_open
-import blockchain
+from unittest.mock import MagicMock, patch
 from node import Node
 from log import Log
 from transaction import Transaction
 from blockchain import Blockchain
 from tests.mock_utils import generate_single_transaction
-from utils.helpers import isfloat
 
 
 class TestNode(unittest.TestCase):

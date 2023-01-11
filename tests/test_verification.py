@@ -1,13 +1,13 @@
 import unittest
-from unittest.mock import patch, mock_open
+from unittest.mock import patch
 import blockchain
-from transaction import Transaction, PrimeTransaction
+from transaction import Transaction
 from verification import Verification
 from blockchain import Blockchain
 from tests.mock_utils import (
     generate_single_transaction,
-    get_open_transaction_stub,
-    get_open_transaction_stub,
+    get_prime_blockchain_stub,
+    get_prime_open_transaction_stub,
     derived_from_genesis_block,
     genesis_block,
 )
@@ -66,25 +66,24 @@ class TestVerification(unittest.TestCase):
         blockchain.open_transaction = [Transaction(generate_single_transaction())]
         previous_hash = blockchain.get_last_blockchain_value()["previous_hash"]  # type: ignore for mock purpose
         salt = Verification.find_block_salt(
-            blockchain.get_prime(Transaction), previous_hash
+            blockchain.map_to_prime(Transaction), previous_hash
         )
         valid = Verification.valid_salt(
-            blockchain.get_prime(Transaction), previous_hash, salt
+            blockchain.map_to_prime(Transaction), previous_hash, salt
         )
         get_last_blockchain_value.called
         self.assertEqual(valid, True)
 
     @patch.object(Blockchain, "get_last_blockchain_value")
     def test_invalid_proof(self, get_last_blockchain_value):
-        blockchain.open_transaction = get_open_transaction_stub()
         valid = Verification.valid_salt(
-            blockchain.open_transaction, "previous_hash", 20
+            get_prime_blockchain_stub(), "previous_hash", 20
         )
         get_last_blockchain_value.called
         self.assertEqual(valid, False)
 
     def test_find_block_salt(self):
-        open_transaction = [{"sender": "Marc", "recipient": "Bob", "amount": 100}]
+        open_transaction = get_prime_open_transaction_stub()
         previous_hash = (
             "076f74c1e78bceb14a65775013948f24eaacc3ac1bc7e3e911fe4aa3ae198c7"
         )

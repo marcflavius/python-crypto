@@ -32,14 +32,6 @@
         "documentation": {}
     },
     {
-        "label": "PrimeBlock",
-        "importPath": "block",
-        "description": "block",
-        "isExtraImport": true,
-        "detail": "block",
-        "documentation": {}
-    },
-    {
         "label": "Block",
         "importPath": "block",
         "description": "block",
@@ -56,14 +48,6 @@
         "documentation": {}
     },
     {
-        "label": "Block",
-        "importPath": "block",
-        "description": "block",
-        "isExtraImport": true,
-        "detail": "block",
-        "documentation": {}
-    },
-    {
         "label": "PrimeBlock",
         "importPath": "block",
         "description": "block",
@@ -112,7 +96,15 @@
         "documentation": {}
     },
     {
-        "label": "PrimeTransaction",
+        "label": "Transaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "Transaction",
         "importPath": "transaction",
         "description": "transaction",
         "isExtraImport": true,
@@ -137,6 +129,14 @@
     },
     {
         "label": "Transaction",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "PrimeTransaction",
         "importPath": "transaction",
         "description": "transaction",
         "isExtraImport": true,
@@ -169,15 +169,7 @@
         "documentation": {}
     },
     {
-        "label": "generate_single_transaction",
-        "importPath": "tests.mock_utils",
-        "description": "tests.mock_utils",
-        "isExtraImport": true,
-        "detail": "tests.mock_utils",
-        "documentation": {}
-    },
-    {
-        "label": "get_blockchain_stub",
+        "label": "derived_from_genesis_block",
         "importPath": "tests.mock_utils",
         "description": "tests.mock_utils",
         "isExtraImport": true,
@@ -193,7 +185,7 @@
         "documentation": {}
     },
     {
-        "label": "derived_from_genesis_block",
+        "label": "generate_single_transaction",
         "importPath": "tests.mock_utils",
         "description": "tests.mock_utils",
         "isExtraImport": true,
@@ -209,7 +201,15 @@
         "documentation": {}
     },
     {
-        "label": "generate_single_transaction",
+        "label": "get_blockchain_stub",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "none_derived_block_with_transaction",
         "importPath": "tests.mock_utils",
         "description": "tests.mock_utils",
         "isExtraImport": true,
@@ -233,7 +233,7 @@
         "documentation": {}
     },
     {
-        "label": "get_open_transaction_stub",
+        "label": "generate_single_transaction",
         "importPath": "tests.mock_utils",
         "description": "tests.mock_utils",
         "isExtraImport": true,
@@ -241,7 +241,15 @@
         "documentation": {}
     },
     {
-        "label": "get_open_transaction_stub",
+        "label": "get_prime_blockchain_stub",
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "isExtraImport": true,
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "get_prime_open_transaction_stub",
         "importPath": "tests.mock_utils",
         "description": "tests.mock_utils",
         "isExtraImport": true,
@@ -262,14 +270,6 @@
         "description": "tests.mock_utils",
         "isExtraImport": true,
         "detail": "tests.mock_utils",
-        "documentation": {}
-    },
-    {
-        "label": "isfloat",
-        "importPath": "utils.helpers",
-        "description": "utils.helpers",
-        "isExtraImport": true,
-        "detail": "utils.helpers",
         "documentation": {}
     },
     {
@@ -346,22 +346,6 @@
         "documentation": {}
     },
     {
-        "label": "mock_open",
-        "importPath": "unittest.mock",
-        "description": "unittest.mock",
-        "isExtraImport": true,
-        "detail": "unittest.mock",
-        "documentation": {}
-    },
-    {
-        "label": "MagicMock",
-        "importPath": "unittest.mock",
-        "description": "unittest.mock",
-        "isExtraImport": true,
-        "detail": "unittest.mock",
-        "documentation": {}
-    },
-    {
         "label": "patch",
         "importPath": "unittest.mock",
         "description": "unittest.mock",
@@ -370,30 +354,6 @@
         "documentation": {}
     },
     {
-        "label": "mock_open",
-        "importPath": "unittest.mock",
-        "description": "unittest.mock",
-        "isExtraImport": true,
-        "detail": "unittest.mock",
-        "documentation": {}
-    },
-    {
-        "label": "patch",
-        "importPath": "unittest.mock",
-        "description": "unittest.mock",
-        "isExtraImport": true,
-        "detail": "unittest.mock",
-        "documentation": {}
-    },
-    {
-        "label": "mock_open",
-        "importPath": "unittest.mock",
-        "description": "unittest.mock",
-        "isExtraImport": true,
-        "detail": "unittest.mock",
-        "documentation": {}
-    },
-    {
         "label": "Node",
         "importPath": "node",
         "description": "node",
@@ -407,22 +367,6 @@
         "description": "node",
         "isExtraImport": true,
         "detail": "node",
-        "documentation": {}
-    },
-    {
-        "label": "Node",
-        "importPath": "node",
-        "description": "node",
-        "isExtraImport": true,
-        "detail": "node",
-        "documentation": {}
-    },
-    {
-        "label": "Log",
-        "importPath": "log",
-        "description": "log",
-        "isExtraImport": true,
-        "detail": "log",
         "documentation": {}
     },
     {
@@ -547,32 +491,31 @@
         "documentation": {}
     },
     {
-        "label": "Member",
-        "importPath": "member",
-        "description": "member",
+        "label": "time",
+        "importPath": "time",
+        "description": "time",
         "isExtraImport": true,
-        "detail": "member",
+        "detail": "time",
         "documentation": {}
     },
     {
-        "label": "abc",
-        "kind": 6,
+        "label": "time",
+        "importPath": "time",
+        "description": "time",
         "isExtraImport": true,
-        "importPath": "abc",
-        "description": "abc",
-        "detail": "abc",
+        "detail": "time",
         "documentation": {}
     },
     {
-        "label": "Callable",
-        "importPath": "typing",
-        "description": "typing",
+        "label": "time",
+        "importPath": "time",
+        "description": "time",
         "isExtraImport": true,
-        "detail": "typing",
+        "detail": "time",
         "documentation": {}
     },
     {
-        "label": "NamedTuple",
+        "label": "TypedDict",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -585,46 +528,6 @@
         "description": "typing",
         "isExtraImport": true,
         "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Type",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "TypedDict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "time",
-        "importPath": "time",
-        "description": "time",
-        "isExtraImport": true,
-        "detail": "time",
-        "documentation": {}
-    },
-    {
-        "label": "time",
-        "importPath": "time",
-        "description": "time",
-        "isExtraImport": true,
-        "detail": "time",
-        "documentation": {}
-    },
-    {
-        "label": "time",
-        "importPath": "time",
-        "description": "time",
-        "isExtraImport": true,
-        "detail": "time",
         "documentation": {}
     },
     {
@@ -739,7 +642,16 @@
         "kind": 2,
         "importPath": "tests.mock_utils",
         "description": "tests.mock_utils",
-        "peekOfCode": "def generate_single_transaction(\n    sender=\"Marc\", recipient=\"Bob\", amount=10\n) -> PrimeTransaction:\n    return {\"sender\": sender, \"recipient\": recipient, \"amount\": amount}\ndef get_open_transaction_stub():\n    return [{\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100}]\ndef get_blockchain_stub():\n    return [\n        Block(genesis_block),\n        Block(",
+        "peekOfCode": "def generate_single_transaction(\n    sender=\"Marc\", recipient=\"Bob\", amount=10\n) -> PrimeTransaction:\n    return {\"sender\": sender, \"recipient\": recipient, \"amount\": amount}\ndef get_prime_open_transaction_stub() -> list[PrimeTransaction]:\n    return [{\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100}]\ndef get_open_transaction_stub():\n    return [Transaction({\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100})]\ndef get_blockchain_stub():\n    return [",
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "get_prime_open_transaction_stub",
+        "kind": 2,
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "peekOfCode": "def get_prime_open_transaction_stub() -> list[PrimeTransaction]:\n    return [{\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100}]\ndef get_open_transaction_stub():\n    return [Transaction({\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100})]\ndef get_blockchain_stub():\n    return [\n        Block(genesis_block),\n        Block(\n            {\n                \"salt\": 0,",
         "detail": "tests.mock_utils",
         "documentation": {}
     },
@@ -748,7 +660,7 @@
         "kind": 2,
         "importPath": "tests.mock_utils",
         "description": "tests.mock_utils",
-        "peekOfCode": "def get_open_transaction_stub():\n    return [{\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100}]\ndef get_blockchain_stub():\n    return [\n        Block(genesis_block),\n        Block(\n            {\n                \"salt\": 0,\n                \"previous_hash\": \"00\",\n                \"index\": 1,",
+        "peekOfCode": "def get_open_transaction_stub():\n    return [Transaction({\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100})]\ndef get_blockchain_stub():\n    return [\n        Block(genesis_block),\n        Block(\n            {\n                \"salt\": 0,\n                \"previous_hash\": \"00\",\n                \"index\": 1,",
         "detail": "tests.mock_utils",
         "documentation": {}
     },
@@ -758,6 +670,15 @@
         "importPath": "tests.mock_utils",
         "description": "tests.mock_utils",
         "peekOfCode": "def get_blockchain_stub():\n    return [\n        Block(genesis_block),\n        Block(\n            {\n                \"salt\": 0,\n                \"previous_hash\": \"00\",\n                \"index\": 1,\n                \"transactions\": [\n                    {\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100},",
+        "detail": "tests.mock_utils",
+        "documentation": {}
+    },
+    {
+        "label": "get_prime_blockchain_stub",
+        "kind": 2,
+        "importPath": "tests.mock_utils",
+        "description": "tests.mock_utils",
+        "peekOfCode": "def get_prime_blockchain_stub():\n    return [\n        genesis_block,\n        {\n            \"salt\": 0,\n            \"previous_hash\": \"00\",\n            \"index\": 1,\n            \"transactions\": [\n                {\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100},\n                {\"sender\": \"Marc\", \"recipient\": \"Bob\", \"amount\": 100},",
         "detail": "tests.mock_utils",
         "documentation": {}
     },
@@ -775,7 +696,7 @@
         "kind": 6,
         "importPath": "tests.test_blockchain",
         "description": "tests.test_blockchain",
-        "peekOfCode": "class TestBlockchain(unittest.TestCase):\n    def setUp(self):\n        return super().setUp()\n    def tearDown(self) -> None:\n        return super().tearDown()\n    # (start)\n    def test_hydrate_blockchain_success(self):\n        blockchain = Blockchain(\"Marc\")\n        open_transaction = [generate_single_transaction()]\n        given_blockchain = [genesis_block, derived_from_genesis_block]",
+        "peekOfCode": "class TestBlockchain(unittest.TestCase):\n    def setUp(self):\n        return super().setUp()\n    def tearDown(self) -> None:\n        return super().tearDown()\n    # (start)\n    def test_map_to_prime(self):\n        open_transaction: list[Transaction] = [\n            Transaction(generate_single_transaction())\n        ]",
         "detail": "tests.test_blockchain",
         "documentation": {}
     },
@@ -847,7 +768,7 @@
         "kind": 6,
         "importPath": "block",
         "description": "block",
-        "peekOfCode": "class Block(Printable, Primeable):\n    def __init__(self, block: PrimeBlock):\n        self.index = block[\"index\"]\n        self.previous_hash = block[\"previous_hash\"]\n        self.transactions = block[\"transactions\"]\n        self.salt = block[\"salt\"]\n        if hasattr(block, 'created_at'):\n            self.created_at = block[\"created_at\"] # type: ignore\n            return \n        self.created_at = time()",
+        "peekOfCode": "class Block(Printable, Primeable):\n    def __init__(self, block: PrimeBlock):\n        self.index = block[\"index\"]\n        self.previous_hash = block[\"previous_hash\"]\n        self.transactions = block[\"transactions\"]\n        self.salt = block[\"salt\"]\n        if hasattr(block, \"created_at\"):\n            self.created_at = block[\"created_at\"]  # type: ignore\n            return\n        self.created_at = time()",
         "detail": "block",
         "documentation": {}
     },
@@ -856,7 +777,7 @@
         "kind": 5,
         "importPath": "block",
         "description": "block",
-        "peekOfCode": "PrimeBlock = TypedDict('PrimeBlock', {'index': int, 'previous_hash': str, 'transactions': list, 'salt': int})\nclass Block(Printable, Primeable):\n    def __init__(self, block: PrimeBlock):\n        self.index = block[\"index\"]\n        self.previous_hash = block[\"previous_hash\"]\n        self.transactions = block[\"transactions\"]\n        self.salt = block[\"salt\"]\n        if hasattr(block, 'created_at'):\n            self.created_at = block[\"created_at\"] # type: ignore\n            return ",
+        "peekOfCode": "PrimeBlock = TypedDict(\n    \"PrimeBlock\",\n    {\"index\": int, \"previous_hash\": str, \"transactions\": list, \"salt\": int},\n)\nclass Block(Printable, Primeable):\n    def __init__(self, block: PrimeBlock):\n        self.index = block[\"index\"]\n        self.previous_hash = block[\"previous_hash\"]\n        self.transactions = block[\"transactions\"]\n        self.salt = block[\"salt\"]",
         "detail": "block",
         "documentation": {}
     },
@@ -928,7 +849,7 @@
         "kind": 6,
         "importPath": "verification",
         "description": "verification",
-        "peekOfCode": "class Verification:\n    @staticmethod\n    def find_block_salt(transactions, previous_hash):\n        \"\"\"_summary_\n        Args:\n            transactions (list): open transaction\n            previous_hash (str): previous hash stored on last block in the chain\n        Returns:\n            _type_: int\n        \"\"\"",
+        "peekOfCode": "class Verification:\n    @staticmethod\n    def find_block_salt(transactions: list[PrimeTransaction], previous_hash):\n        \"\"\"_summary_\n        Args:\n            transactions (list): open transaction\n            previous_hash (str): previous hash stored on last block in the chain\n        Returns:\n            _type_: int\n        \"\"\"",
         "detail": "verification",
         "documentation": {}
     }

@@ -4,7 +4,6 @@ from functools import reduce
 import json
 import os.path
 from block import Block, PrimeBlock
-from typing import Type
 from transaction import Transaction, PrimeTransaction
 from log import Log
 from member import Member
@@ -52,17 +51,15 @@ class Blockchain(Printable):
             else blockchain_location_path
         )
 
-    def get_prime(self, subject):
+    def map_to_prime(self, subject: type[Block] | type[Transaction]):
         output = []
         if subject.__name__ == Transaction.__name__ and len(self.open_transaction) > 0:
-            mapping = self.open_transaction
+            mapping = self.open_transaction[:]
         elif subject.__name__ == Block.__name__:
-            mapping = self.open_transaction
+            mapping = self.blockchain[:]
         else:
             return []
         for item in mapping:
-            print("item:", item)
-
             output.append(item.to_prime())
         return output
 
@@ -87,9 +84,9 @@ class Blockchain(Printable):
         }
         self.open_transaction.append(Transaction(reward_transaction))
         # hashing
-        salt = Verification.find_block_salt(self.get_prime(Transaction), previous_hash)
+        salt = Verification.find_block_salt(self.map_to_prime(Transaction), previous_hash)
         current_hash = Verification.hash_block(
-            self.get_prime(Transaction), previous_hash, salt
+            self.map_to_prime(Transaction), previous_hash, salt
         )
         new_block = Block(
             {
@@ -101,7 +98,7 @@ class Blockchain(Printable):
         )
         self.blockchain.append(new_block)
 
-        valid, index = Verification.verify_chain(self.blockchain)
+        valid, index = Verification.verify_chain(self.map_to_prime(Block))
         if valid:
             self.save_blockchain()
             self.open_transaction.clear()
@@ -187,13 +184,12 @@ class Blockchain(Printable):
             Log.log("Can't create the file {}".format(blockchain_location_path))
 
     def save_blockchain(self):
-
         try:
             with open(self.blockchain_location_path, encoding="utf-8", mode="w") as f:
                 data = json.dumps(
                     {
-                        "blockchain": self.get_prime(Block),
-                        "open_transaction": self.get_prime(Transaction),
+                        "blockchain": self.map_to_prime(Block),
+                        "open_transaction": self.map_to_prime(Transaction),
                     },
                     indent=4,
                 )
