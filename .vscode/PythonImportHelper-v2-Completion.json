@@ -523,6 +523,46 @@
         "documentation": {}
     },
     {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Generic",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "NewType",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "TypeVar",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "TypedDict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "TypedDict",
         "importPath": "typing",
         "description": "typing",
@@ -795,7 +835,16 @@
         "kind": 5,
         "importPath": "blockchain",
         "description": "blockchain",
-        "peekOfCode": "blockchain = []\nopen_transaction: list[Transaction] = []\nMINING_TRANSACTION: int = 5\nclass Blockchain(Printable):\n    def __init__(\n        self,\n        owner: str,\n        init_chain: list[Block] = [],\n        init_transactions: list[Transaction] = [],\n        blockchain_location_path: str | None = None,",
+        "peekOfCode": "blockchain = []\nopen_transaction: list[Transaction] = []\nMINING_TRANSACTION: int = 5\nSubjectT = TypeVar(\"SubjectT\")\nclass Blockchain(Printable):\n    def __init__(\n        self,\n        owner: str,\n        init_chain: list[Block] = [],\n        init_transactions: list[Transaction] = [],",
+        "detail": "blockchain",
+        "documentation": {}
+    },
+    {
+        "label": "SubjectT",
+        "kind": 5,
+        "importPath": "blockchain",
+        "description": "blockchain",
+        "peekOfCode": "SubjectT = TypeVar(\"SubjectT\")\nclass Blockchain(Printable):\n    def __init__(\n        self,\n        owner: str,\n        init_chain: list[Block] = [],\n        init_transactions: list[Transaction] = [],\n        blockchain_location_path: str | None = None,\n    ):\n        self.owner = owner",
         "detail": "blockchain",
         "documentation": {}
     },

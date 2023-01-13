@@ -41,9 +41,7 @@ class TestBlockchain(unittest.TestCase):
             {
                 "previous_hash": "GENESIS_BLOCK",
                 "index": 0,
-                "transactions": [
-                    {"sender": "Marc", "recipient": "Bob", "amount": 100}
-                ],
+                "transactions": [{"sender": "Marc", "recipient": "Bob", "amount": 100}],
                 "salt": 22,
             }
         ]
@@ -51,10 +49,10 @@ class TestBlockchain(unittest.TestCase):
     def test_hydrate_blockchain_success(self):
         blockchain = Blockchain("Marc")
         open_transaction = [generate_single_transaction()]
-        given_blockchain = [genesis_block, derived_from_genesis_block]
+        given_chain = [genesis_block, derived_from_genesis_block]
         data = json.dumps(
             {
-                "blockchain": given_blockchain,
+                "blockchain": given_chain,
                 "open_transaction": open_transaction,
             },
             indent=4,
@@ -62,8 +60,8 @@ class TestBlockchain(unittest.TestCase):
         with patch("builtins.open", mock_open(read_data=data)):
             blockchain.hydrate_blockchain("blockchain.txt")
             open.assert_called_with("blockchain.txt", encoding="utf-8", mode="r")
-            self.assertEqual(blockchain.blockchain, given_blockchain)
-            self.assertEqual(blockchain.open_transaction, open_transaction)
+            assert all(isinstance(n, Block) for n in blockchain.blockchain) is True
+            assert all(isinstance(n, Transaction) for n in blockchain.open_transaction) is True
 
     @patch.object(Log, "log")
     def test_hydrate_blockchain_fails_on_io_error(self, logger):
@@ -81,13 +79,20 @@ class TestBlockchain(unittest.TestCase):
     def test_hydrate_blockchain_on_json_parse_error(self, logger):
         blockchain = Blockchain("Marc")
         mockOpen = mock_open()
-        mockOpen.side_effect = ValueError
+        mockOpen.side_effect = ValueError 
         with patch("builtins.open", mockOpen):
             blockchain.hydrate_blockchain("blockchain.txt")
             assert logger.called
-            # logger.assert_called_with(
-            # "blockchain.txt parse failed, file format incorrect."
-            # )
+            logger.assert_called_with(
+            "blockchain.txt parse failed, file format incorrect."
+            )
+        mockOpen.side_effect = AttributeError 
+        with patch("builtins.open", mockOpen):
+            blockchain.hydrate_blockchain("blockchain.txt")
+            assert logger.called
+            logger.assert_called_with(
+            "blockchain.txt parse failed, file format incorrect."
+            )
 
     def test_save_blockchain_success(self):
         blockchain = Blockchain(

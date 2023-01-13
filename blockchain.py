@@ -3,6 +3,7 @@
 from functools import reduce
 import json
 import os.path
+from typing import Any, Generic, NewType, TypeVar, TypedDict
 from block import Block, PrimeBlock
 from transaction import Transaction, PrimeTransaction
 from log import Log
@@ -31,7 +32,7 @@ blockchain = []
 open_transaction: list[Transaction] = []
 MINING_TRANSACTION: int = 5
 
-
+SubjectT = TypeVar("SubjectT")
 class Blockchain(Printable):
     def __init__(
         self,
@@ -50,6 +51,15 @@ class Blockchain(Printable):
             if blockchain_location_path is None
             else blockchain_location_path
         )
+
+    @staticmethod
+    def map_to_instance_list(
+        subject: type[SubjectT], subject_list: list[PrimeTransaction] | list[PrimeBlock]
+    ) -> list[SubjectT]:
+        mapped_list = []
+        for item in subject_list:
+            mapped_list.append(subject(item))
+        return mapped_list
 
     def map_to_prime(self, subject: type[Block] | type[Transaction]):
         output = []
@@ -84,7 +94,9 @@ class Blockchain(Printable):
         }
         self.open_transaction.append(Transaction(reward_transaction))
         # hashing
-        salt = Verification.find_block_salt(self.map_to_prime(Transaction), previous_hash)
+        salt = Verification.find_block_salt(
+            self.map_to_prime(Transaction), previous_hash
+        )
         current_hash = Verification.hash_block(
             self.map_to_prime(Transaction), previous_hash, salt
         )
@@ -100,8 +112,8 @@ class Blockchain(Printable):
 
         valid, index = Verification.verify_chain(self.map_to_prime(Block))
         if valid:
-            self.save_blockchain()
             self.open_transaction.clear()
+            self.save_blockchain()
             Log.log("Block added!")
         else:
             # revert
@@ -157,12 +169,20 @@ class Blockchain(Printable):
             blockchain.append(genesis_block)
 
     def hydrate_blockchain(self, blockchain_location_path="blockchain.txt"):
-
+        FileStore = TypedDict(
+            "Filestore",
+            {
+                "blockchain": list[PrimeBlock],
+                "open_transaction": list[PrimeTransaction],
+            },
+        )
         try:
             with open(self.blockchain_location_path, encoding="utf-8", mode="r") as f:
-                data = json.load(f)
-                self.blockchain = data["blockchain"]
-                self.open_transaction = data["open_transaction"]
+                data: FileStore = json.load(f)
+                self.blockchain = Blockchain.map_to_instance_list(Block, data["blockchain"])
+                self.open_transaction = Blockchain.map_to_instance_list(
+                    Transaction, data["open_transaction"]
+                )
         except IOError:
             Log.log(
                 "Can't read the blockchain filestore {}".format(
@@ -170,6 +190,12 @@ class Blockchain(Printable):
                 )
             )
         except ValueError:
+            Log.log(
+                "{} parse failed, file format incorrect.".format(
+                    blockchain_location_path
+                )
+            )
+        except AttributeError:
             Log.log(
                 "{} parse failed, file format incorrect.".format(
                     blockchain_location_path
